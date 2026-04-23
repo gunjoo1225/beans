@@ -115,7 +115,9 @@ function submitOrder() {
 
   const order = {
     orderNo:   'ORD-' + Date.now().toString().slice(-8),
-    product:   `${data.name} ${data.weight}g (${data.grind}) × ${data.quantity}`,
+    product:   items.length === 1
+      ? `${items[0].name} ${items[0].weight}g (${items[0].grind}) × ${items[0].quantity}`
+      : `${items[0].name} 외 ${items.length - 1}건`,
     subtotal,
     shipping,
     total,
