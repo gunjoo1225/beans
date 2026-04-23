@@ -263,9 +263,14 @@ function loadProductFromUrl() {
   }
 
   // 원산지 지도
-  document.getElementById('originTitle').textContent = `${p.country} · ${p.area}`;
+  const COUNTRY_KO = {
+    Ethiopia: '에티오피아', Colombia: '콜롬비아', Kenya: '케냐',
+    Guatemala: '과테말라', Panama: '파나마', Brazil: '브라질',
+  };
+  document.getElementById('originTitle').textContent =
+    `${COUNTRY_KO[p.country] || p.country} · ${p.area}`;
   document.getElementById('originSub').textContent =
-    [p.altitude, p.process].filter(Boolean).join(' · ');
+    [p.altitude && `해발 ${p.altitude}`, p.process].filter(Boolean).join(' · ');
   const mapSection = document.getElementById('originMapSection');
   if (p.mapCoord) {
     const s = p.mapCoord.span || 1.5;

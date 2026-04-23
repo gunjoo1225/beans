@@ -34,7 +34,7 @@
   <!-- PRODUCT DETAIL -->
   <main class="product-layout">
 
-    <!-- 이미지 영역 -->
+    <!-- 왼쪽: 이미지 + 탐색 정보 -->
     <section class="product-images">
       <div class="image-main">
         <img id="mainImage" src="https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=700&q=80" alt="Ethiopia Yirgacheffe 원두" />
@@ -49,6 +49,21 @@
         <button class="thumb" onclick="changeImage(this, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80')">
           <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&q=80" alt="썸네일 3" />
         </button>
+      </div>
+
+      <!-- 플레이버 노트 -->
+      <div class="flavor-section">
+        <div class="divider"></div>
+        <p class="section-label">FLAVOR NOTES</p>
+        <div class="flavor-chart-wrap">
+          <svg id="flavorChart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="flavor-tags">
+          <span class="flavor-tag">Jasmine</span>
+          <span class="flavor-tag">Bergamot</span>
+          <span class="flavor-tag">Lemon</span>
+          <span class="flavor-tag">Peach</span>
+        </div>
       </div>
 
       <!-- 제품 스토리 -->
@@ -84,17 +99,17 @@
 
     </section>
 
-    <!-- 상품 정보 + 구매 영역 -->
+    <!-- 오른쪽: 구매 흐름 -->
     <section class="product-info">
 
-      <!-- 상품 기본 정보 -->
+      <!-- 상품명 + 가격 -->
       <div class="product-header">
         <p class="product-region">ETHIOPIA · YIRGACHEFFE</p>
         <h1 class="product-name">Ethiopia Yirgacheffe</h1>
         <p class="product-price" id="productPrice">₩18,000</p>
       </div>
 
-      <!-- 플레이버 노트 -->
+      <!-- 원두 스펙 -->
       <div class="product-meta">
         <div class="meta-row">
           <span class="meta-label">ROAST</span>
@@ -107,19 +122,6 @@
         <div class="meta-row">
           <span class="meta-label">ALTITUDE</span>
           <span class="meta-value">1,800–2,200m</span>
-        </div>
-      </div>
-
-      <div class="flavor-section">
-        <p class="section-label">FLAVOR NOTES</p>
-        <div class="flavor-chart-wrap">
-          <svg id="flavorChart" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
-        </div>
-        <div class="flavor-tags">
-          <span class="flavor-tag">Jasmine</span>
-          <span class="flavor-tag">Bergamot</span>
-          <span class="flavor-tag">Lemon</span>
-          <span class="flavor-tag">Peach</span>
         </div>
       </div>
 
@@ -174,8 +176,8 @@
   <section class="origin-map-section" id="originMapSection">
     <div class="origin-map-inner">
       <div class="origin-map-header">
-        <p class="section-label">ORIGIN MAP</p>
-        <h2 class="origin-map-title" id="originTitle">Ethiopia · Yirgacheffe</h2>
+        <p class="section-label">원산지 지도</p>
+        <h2 class="origin-map-title" id="originTitle">에티오피아 · 예르가체프</h2>
         <p class="origin-map-sub" id="originSub">해발 1,800–2,200m · Washed</p>
       </div>
       <iframe id="originMapIframe"
