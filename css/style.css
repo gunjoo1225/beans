@@ -216,9 +216,15 @@ button {
 }
 
 /* ===== 레이더 차트 ===== */
+.flavor-body {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
 .flavor-chart-wrap {
-  width: 100%;
-  max-width: 220px;
+  width: 170px;
+  flex-shrink: 0;
 }
 
 .flavor-chart-wrap svg {
@@ -228,16 +234,18 @@ button {
 
 .flavor-tags {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 8px;
+  flex: 1;
 }
 
 .flavor-tag {
-  padding: 6px 14px;
+  padding: 8px 14px;
   border: 1px solid #E8E4DC;
   font-size: 13px;
   color: #6B6B6B;
   background-color: #FFFFFF;
+  letter-spacing: 0.03em;
 }
 
 /* ===== 구분선 ===== */
