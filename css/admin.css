@@ -1,0 +1,506 @@
+/* ===== ADMIN LAYOUT ===== */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: calc(100vh - 61px);
+}
+
+/* ===== PANELS ===== */
+.form-panel {
+  border-right: 1px solid #E8E4DC;
+  padding: 28px 32px;
+  overflow-y: auto;
+  background-color: #FFFFFF;
+}
+
+.list-panel {
+  padding: 28px 32px;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.panel-title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.product-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #6B6B6B;
+  margin-bottom: 7px;
+}
+
+.form-hint {
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: #AAAAAA;
+}
+
+.required {
+  color: #C0392B;
+}
+
+.form-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #E8E4DC;
+  background-color: #FAF8F4;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #1A1A1A;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #1A1A1A;
+  background-color: #FFFFFF;
+}
+
+.form-select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #E8E4DC;
+  background-color: #FAF8F4;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #1A1A1A;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus {
+  border-color: #1A1A1A;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ===== 가격 ===== */
+.price-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.price-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.price-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #6B6B6B;
+}
+
+/* ===== 이미지 탭 ===== */
+.image-upload-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 7px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid #E8E4DC;
+  background: #FAF8F4;
+  color: #6B6B6B;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn:first-child {
+  border-right: none;
+}
+
+.tab-btn.active {
+  background: #1A1A1A;
+  color: #FFFFFF;
+  border-color: #1A1A1A;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed #E8E4DC;
+  background: #FAF8F4;
+  font-size: 13px;
+  color: #6B6B6B;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.file-upload-label:hover {
+  border-color: #1A1A1A;
+  color: #1A1A1A;
+}
+
+/* ===== 이미지 미리보기 ===== */
+.image-preview {
+  margin-top: 8px;
+  width: 100%;
+  height: 110px;
+  border: 1px dashed #E8E4DC;
+  background-color: #F5F2EC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 12px;
+  color: #AAAAAA;
+  text-align: center;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== 태그 입력 ===== */
+.tag-input-wrap {
+  border: 1px solid #E8E4DC;
+  background-color: #FAF8F4;
+  padding: 8px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-height: 46px;
+  transition: border-color 0.2s;
+}
+
+.tag-input-wrap:focus-within {
+  border-color: #1A1A1A;
+  background-color: #FFFFFF;
+}
+
+.tag-list {
+  display: contents;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tag-remove {
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.tag-remove:hover {
+  opacity: 1;
+}
+
+.tag-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #1A1A1A;
+  min-width: 100px;
+  flex: 1;
+  padding: 2px 0;
+}
+
+/* ===== 슬라이더 ===== */
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 20px;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #6B6B6B;
+}
+
+.slider-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-align: right;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 2px;
+  background: #E8E4DC;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 13px;
+  height: 13px;
+  background: #1A1A1A;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* ===== 라디오 ===== */
+.radio-group {
+  display: flex;
+  gap: 20px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ===== 버튼 ===== */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 4px;
+}
+
+.btn-submit:hover {
+  background-color: #444444;
+}
+
+.btn-submit.editing {
+  background-color: #2C6E49;
+}
+
+.btn-reset {
+  font-size: 12px;
+  color: #AAAAAA;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-reset:hover {
+  color: #1A1A1A;
+}
+
+.btn-view-shop {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B6B6B;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+}
+
+.btn-view-shop:hover {
+  color: #1A1A1A;
+}
+
+/* ===== 제품 목록 ===== */
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background-color: #E8E4DC;
+  border: 1px solid #E8E4DC;
+}
+
+.list-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background-color: #FAF8F4;
+  transition: background-color 0.2s;
+}
+
+.list-item:hover {
+  background-color: #FFFFFF;
+}
+
+.list-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  background-color: #F0EDE6;
+  display: block;
+  flex-shrink: 0;
+}
+
+.list-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.list-region {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #6B6B6B;
+}
+
+.list-name {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-meta {
+  font-size: 12px;
+  color: #6B6B6B;
+}
+
+.list-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-edit, .btn-delete {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid;
+  transition: all 0.2s;
+}
+
+.btn-edit {
+  border-color: #1A1A1A;
+  background: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.btn-edit:hover {
+  background: #1A1A1A;
+  color: #FFFFFF;
+}
+
+.btn-delete {
+  border-color: #E8E4DC;
+  background: #FFFFFF;
+  color: #C0392B;
+}
+
+.btn-delete:hover {
+  border-color: #C0392B;
+  background: #C0392B;
+  color: #FFFFFF;
+}
+
+.empty-list {
+  padding: 60px 20px;
+  text-align: center;
+  color: #AAAAAA;
+  font-size: 14px;
+  line-height: 1.8;
+  background-color: #FAF8F4;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 11px 22px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== NAV ACTIVE ===== */
+.nav a.active {
+  color: #1A1A1A;
+}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 — 한국엘리스테이블</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">한국엘리스테이블</a>
+    <nav class="nav">
+      <a href="shop.html">Shop</a>
+      <a href="admin.html" class="active">Admin</a>
+    </nav>
+  </header>
+
+  <div class="admin-layout">
+
+    <!-- 왼쪽: 등록 폼 -->
+    <aside class="form-panel">
+      <div class="panel-header">
+        <h2 class="panel-title" id="formTitle">제품 등록</h2>
+        <button class="btn-reset" onclick="resetForm()">초기화</button>
+      </div>
+
+      <form id="productForm" onsubmit="handleSubmit(event)">
+        <input type="hidden" id="editId" />
+
+        <!-- 이미지 -->
+        <div class="form-group">
+          <label class="form-label">대표 이미지</label>
+          <div class="image-upload-tabs">
+            <button type="button" class="tab-btn active" onclick="switchImageTab(this, 'url')">URL 입력</button>
+            <button type="button" class="tab-btn" onclick="switchImageTab(this, 'file')">파일 업로드</button>
+          </div>
+          <div id="tabUrl">
+            <input type="text" id="imageUrl" class="form-input" placeholder="https://images.unsplash.com/..." oninput="previewImage()" />
+          </div>
+          <div id="tabFile" style="display:none">
+            <label class="file-upload-label">
+              <input type="file" id="imageFile" accept="image/*" onchange="handleFileUpload(event)" style="display:none" />
+              <span id="fileLabel">클릭하여 이미지 선택</span>
+            </label>
+          </div>
+          <div class="image-preview" id="imagePreview">
+            <span>이미지를 추가하면 미리보기가 표시됩니다</span>
+          </div>
+        </div>
+
+        <!-- 상품명 -->
+        <div class="form-group">
+          <label class="form-label">상품명 <span class="required">*</span></label>
+          <input type="text" id="productName" class="form-input" placeholder="Ethiopia Yirgacheffe" required />
+        </div>
+
+        <!-- 국가 / 지역 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">국가 <span class="required">*</span></label>
+            <input type="text" id="country" class="form-input" placeholder="Ethiopia" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">지역 <span class="required">*</span></label>
+            <input type="text" id="area" class="form-input" placeholder="Yirgacheffe" required />
+          </div>
+        </div>
+
+        <!-- 로스팅 / 프로세스 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">로스팅 <span class="required">*</span></label>
+            <select id="roast" class="form-select" required>
+              <option value="">선택</option>
+              <option value="light">Light</option>
+              <option value="medium">Medium</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">프로세스</label>
+            <input type="text" id="process" class="form-input" placeholder="Washed" />
+          </div>
+        </div>
+
+        <!-- 고도 / 뱃지 -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">고도</label>
+            <input type="text" id="altitude" class="form-input" placeholder="1,800–2,200m" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">뱃지</label>
+            <select id="badge" class="form-select">
+              <option value="">없음</option>
+              <option value="New">New</option>
+              <option value="Premium">Premium</option>
+              <option value="Best">Best</option>
+              <option value="Limited">Limited</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 가격 -->
+        <div class="form-group">
+          <label class="form-label">가격 (원) <span class="required">*</span></label>
+          <div class="price-row">
+            <div class="price-item">
+              <span class="price-label">200g</span>
+              <input type="number" id="price200" class="form-input" placeholder="18000" required />
+            </div>
+            <div class="price-item">
+              <span class="price-label">500g</span>
+              <input type="number" id="price500" class="form-input" placeholder="38000" required />
+            </div>
+            <div class="price-item">
+              <span class="price-label">1kg</span>
+              <input type="number" id="price1000" class="form-input" placeholder="68000" required />
+            </div>
+          </div>
+        </div>
+
+        <!-- 플레이버 태그 -->
+        <div class="form-group">
+          <label class="form-label">플레이버 노트 <span class="form-hint">(입력 후 Enter)</span></label>
+          <div class="tag-input-wrap">
+            <div class="tag-list" id="tagList"></div>
+            <input type="text" id="tagInput" class="tag-input" placeholder="Jasmine" onkeydown="handleTagInput(event)" />
+          </div>
+        </div>
+
+        <!-- 플레이버 차트 슬라이더 -->
+        <div class="form-group">
+          <label class="form-label">플레이버 차트 (0–10)</label>
+          <div class="slider-group">
+            <div class="slider-row">
+              <span class="slider-label">FLORAL</span>
+              <input type="range" id="sFloral" min="0" max="10" value="5" oninput="updateSlider(this,'vFloral')" />
+              <span class="slider-value" id="vFloral">5</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">FRUITY</span>
+              <input type="range" id="sFruity" min="0" max="10" value="5" oninput="updateSlider(this,'vFruity')" />
+              <span class="slider-value" id="vFruity">5</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">SWEET</span>
+              <input type="range" id="sSweet" min="0" max="10" value="5" oninput="updateSlider(this,'vSweet')" />
+              <span class="slider-value" id="vSweet">5</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">ACIDITY</span>
+              <input type="range" id="sAcidity" min="0" max="10" value="5" oninput="updateSlider(this,'vAcidity')" />
+              <span class="slider-value" id="vAcidity">5</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">BODY</span>
+              <input type="range" id="sBody" min="0" max="10" value="5" oninput="updateSlider(this,'vBody')" />
+              <span class="slider-value" id="vBody">5</span>
+            </div>
+            <div class="slider-row">
+              <span class="slider-label">ROAST</span>
+              <input type="range" id="sRoast" min="0" max="10" value="5" oninput="updateSlider(this,'vRoast')" />
+              <span class="slider-value" id="vRoast">5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 재고 -->
+        <div class="form-group">
+          <label class="form-label">재고 상태</label>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="stock" value="true" checked /> 재고 있음</label>
+            <label class="radio-label"><input type="radio" name="stock" value="false" /> 품절</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">제품 등록</button>
+      </form>
+    </aside>
+
+    <!-- 오른쪽: 등록된 제품 목록 -->
+    <main class="list-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">등록된 제품 <span class="product-count" id="productCount">0</span></h2>
+        <a href="shop.html" class="btn-view-shop" target="_blank">쇼핑몰 보기 →</a>
+      </div>
+      <div class="product-list" id="productList"></div>
+    </main>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
