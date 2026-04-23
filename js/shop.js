@@ -17,6 +17,7 @@ const DEFAULT_PRODUCTS = [
     badge: 'New',
     description: '에티오피아 예르가체프 지역 소규모 농가에서 핸드픽한 원두입니다. 해발 2,000m 고지대의 서늘한 기후가 특유의 플로럴 향과 밝은 산미를 만들어냅니다. 워시드 공정으로 생두 본연의 깨끗한 개성을 그대로 담았습니다.',
     brewGuide: { temp: '90–93°C', ratio: '1:15', time: '3분', equip: '핸드드립·에어로프레스' },
+    mapCoord: { lat: 6.15, lon: 38.20, span: 1.8 },
     inStock: true,
   },
   {
@@ -34,6 +35,7 @@ const DEFAULT_PRODUCTS = [
     badge: null,
     description: '콜롬비아 우일라 지역은 안데스 산맥의 풍부한 화산 토양이 원두에 달콤한 캐러멜 뉘앙스를 더해줍니다. 중배전으로 산미와 단맛의 균형을 잡아 핸드드립부터 모카포트까지 어떤 추출 방식에도 잘 어울립니다.',
     brewGuide: { temp: '88–91°C', ratio: '1:15', time: '3분 30초', equip: '드립·모카포트' },
+    mapCoord: { lat: 1.89, lon: -75.99, span: 1.5 },
     inStock: true,
   },
   {
@@ -51,6 +53,7 @@ const DEFAULT_PRODUCTS = [
     badge: null,
     description: '케냐 AA 등급은 케냐에서 가장 큰 스크린 사이즈의 원두로, 케냐 특유의 워시드 공정으로 정제됩니다. 블랙커런트의 강렬한 과실향과 자몽의 상큼한 산미가 인상적이며, 식을수록 더 풍부한 향미가 살아납니다.',
     brewGuide: { temp: '92–94°C', ratio: '1:16', time: '3분', equip: '핸드드립·케멕스' },
+    mapCoord: { lat: -0.30, lon: 36.82, span: 1.8 },
     inStock: true,
   },
   {
@@ -68,6 +71,7 @@ const DEFAULT_PRODUCTS = [
     badge: null,
     description: '과테말라 안티과는 아구아·푸에고·아카테낭고 세 화산에 둘러싸인 분지 지형으로 독특한 미기후를 형성합니다. 초콜릿과 아몬드의 묵직한 뒷맛에 오렌지 껍질 같은 시트러스 향이 은은하게 어우러집니다.',
     brewGuide: { temp: '88–90°C', ratio: '1:14', time: '4분', equip: '프렌치프레스·드립' },
+    mapCoord: { lat: 14.56, lon: -90.73, span: 0.8 },
     inStock: true,
   },
   {
@@ -85,6 +89,7 @@ const DEFAULT_PRODUCTS = [
     badge: 'Premium',
     description: '파나마 보케테 에스메랄다 농장에서 생산되는 게이샤 품종은 세계 최고가 원두 중 하나입니다. 복숭아·자스민·열대과일이 복잡하게 어우러지는 향미는 한 번 경험하면 잊기 어려운 특별한 커피 경험을 선사합니다.',
     brewGuide: { temp: '90–92°C', ratio: '1:16', time: '3분', equip: '핸드드립·에어로프레스' },
+    mapCoord: { lat: 8.78, lon: -82.44, span: 0.6 },
     inStock: true,
   },
   {
@@ -102,17 +107,18 @@ const DEFAULT_PRODUCTS = [
     badge: null,
     description: '브라질 산토스는 세계 최대 커피 생산지 브라질의 대표 원두입니다. 내추럴 공정으로 건조해 다크초콜릿과 호두의 고소하고 묵직한 풍미가 살아있으며, 에스프레소 블렌딩 베이스로도 인기가 높습니다.',
     brewGuide: { temp: '86–88°C', ratio: '1:13', time: '25초', equip: '에스프레소·모카포트' },
+    mapCoord: { lat: -23.95, lon: -46.33, span: 1.2 },
     inStock: true,
   },
 ];
 
 function seedDefaultsIfNeeded() {
-  if (localStorage.getItem('beans_seeded_v2')) return;
+  if (localStorage.getItem('beans_seeded_v3')) return;
   const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   const defaultIds = DEFAULT_PRODUCTS.map(p => p.id);
   const customProducts = stored.filter(p => !defaultIds.includes(p.id));
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...DEFAULT_PRODUCTS, ...customProducts]));
-  localStorage.setItem('beans_seeded_v2', 'true');
+  localStorage.setItem('beans_seeded_v3', 'true');
 }
 
 function getProducts() {

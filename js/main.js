@@ -202,6 +202,7 @@ function loadProductFromUrl() {
       image: 'https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?w=700&q=80',
       description: '에티오피아 예르가체프 지역 소규모 농가에서 핸드픽한 원두입니다. 해발 2,000m 고지대의 서늘한 기후가 특유의 플로럴 향과 밝은 산미를 만들어냅니다. 워시드 공정으로 생두 본연의 깨끗한 개성을 그대로 담았습니다.',
       brewGuide: { temp: '90–93°C', ratio: '1:15', time: '3분', equip: '핸드드립·에어로프레스' },
+      mapCoord: { lat: 6.15, lon: 38.20, span: 1.8 },
       inStock: true },
   ];
   const allProducts = [...stored, ...DEFAULT_PRODUCTS];
@@ -259,6 +260,21 @@ function loadProductFromUrl() {
     if (g.ratio) document.getElementById('guideRatio').textContent = g.ratio;
     if (g.time)  document.getElementById('guideTime').textContent  = g.time;
     if (g.equip) document.getElementById('guideEquip').textContent = g.equip;
+  }
+
+  // 원산지 지도
+  document.getElementById('originTitle').textContent = `${p.country} · ${p.area}`;
+  document.getElementById('originSub').textContent =
+    [p.altitude, p.process].filter(Boolean).join(' · ');
+  const mapSection = document.getElementById('originMapSection');
+  if (p.mapCoord) {
+    const s = p.mapCoord.span || 1.5;
+    const { lat, lon } = p.mapCoord;
+    document.getElementById('originMapIframe').src =
+      `https://www.openstreetmap.org/export/embed.html?bbox=${lon - s},${lat - s},${lon + s},${lat + s}&layer=mapnik&marker=${lat},${lon}`;
+    mapSection.style.display = '';
+  } else {
+    mapSection.style.display = 'none';
   }
 }
 
