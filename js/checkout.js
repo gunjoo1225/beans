@@ -67,14 +67,24 @@ function initCheckout() {
 
 // ===== 주소 검색 (Daum Postcode) =====
 function searchAddress() {
-  new daum.Postcode({
-    oncomplete: function (data) {
-      document.getElementById('postcode').value = data.zonecode;
-      document.getElementById('address').value =
-        data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
-      document.getElementById('addressDetail').focus();
-    },
-  }).open();
+  function openPostcode() {
+    new daum.Postcode({
+      oncomplete: function (data) {
+        document.getElementById('postcode').value = data.zonecode;
+        document.getElementById('address').value =
+          data.userSelectedType === 'R' ? data.roadAddress : data.jibunAddress;
+        document.getElementById('addressDetail').focus();
+      },
+    }).open();
+  }
+  if (window.daum && window.daum.Postcode) {
+    openPostcode();
+  } else {
+    const script = document.createElement('script');
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+    script.onload = openPostcode;
+    document.head.appendChild(script);
+  }
 }
 
 // ===== 전체 약관 동의 =====
