@@ -20,6 +20,16 @@
     </nav>
   </header>
 
+  <!-- 관리자 탭 -->
+  <div class="admin-tab-bar">
+    <button class="admin-tab active" id="tabProducts" onclick="switchAdminTab('products')">제품 관리</button>
+    <button class="admin-tab" id="tabOrders" onclick="switchAdminTab('orders')">
+      주문 이력 <span class="order-badge" id="orderBadge">0</span>
+    </button>
+  </div>
+
+  <!-- 제품 관리 패널 -->
+  <div id="productsPanel">
   <div class="admin-layout">
 
     <!-- 왼쪽: 등록 폼 -->
@@ -193,6 +203,24 @@
       <div class="product-list" id="productList"></div>
     </main>
 
+  </div>
+  </div><!-- /productsPanel -->
+
+  <!-- 주문 이력 패널 -->
+  <div id="ordersPanel" style="display:none">
+    <div class="orders-layout">
+      <div class="orders-toolbar">
+        <div class="orders-filter">
+          <button class="filter-tab active" onclick="filterOrders(this,'all')">전체</button>
+          <button class="filter-tab" onclick="filterOrders(this,'주문완료')">주문완료</button>
+          <button class="filter-tab" onclick="filterOrders(this,'배송준비중')">배송준비중</button>
+          <button class="filter-tab" onclick="filterOrders(this,'배송중')">배송중</button>
+          <button class="filter-tab" onclick="filterOrders(this,'배송완료')">배송완료</button>
+        </div>
+        <span class="orders-total-label">총 <strong id="ordersTotalCount">0</strong>건</span>
+      </div>
+      <div id="orderList"></div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>

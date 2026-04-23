@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주문 완료 — 한국엘리스테이블</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">한국엘리스테이블</a>
+    <nav class="nav">
+      <a href="shop.html">Shop</a>
+    </nav>
+  </header>
+
+  <!-- 진행 단계 -->
+  <div class="progress-bar">
+    <div class="progress-step done">장바구니</div>
+    <div class="progress-divider"></div>
+    <div class="progress-step done">주문서 작성</div>
+    <div class="progress-divider"></div>
+    <div class="progress-step active">결제 완료</div>
+  </div>
+
+  <div class="complete-wrap">
+    <div class="complete-icon">✓</div>
+    <h1 class="complete-title">주문이 완료되었습니다</h1>
+    <p class="complete-desc">주문 확인 후 빠르게 발송해드리겠습니다.</p>
+
+    <div class="complete-order-info" id="completeInfo">
+      <div class="complete-row">
+        <span class="complete-label">주문 번호</span>
+        <span class="complete-value" id="completeOrderNo">—</span>
+      </div>
+      <div class="complete-row">
+        <span class="complete-label">주문 상품</span>
+        <span class="complete-value" id="completeProduct">—</span>
+      </div>
+      <div class="complete-row">
+        <span class="complete-label">결제 금액</span>
+        <span class="complete-value" id="completeAmount">—</span>
+      </div>
+      <div class="complete-row">
+        <span class="complete-label">결제 수단</span>
+        <span class="complete-value" id="completePayment">—</span>
+      </div>
+      <div class="complete-row">
+        <span class="complete-label">배송지</span>
+        <span class="complete-value" id="completeAddress">—</span>
+      </div>
+    </div>
+
+    <div class="complete-buttons">
+      <a href="shop.html" class="btn-continue">계속 쇼핑하기</a>
+      <a href="index.html" class="btn-back-home">홈으로</a>
+    </div>
+  </div>
+
+  <script src="js/checkout.js"></script>
+</body>
+</html>

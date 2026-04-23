@@ -50,7 +50,15 @@ function addToCart() {
 // ===== 바로 구매 =====
 function buyNow() {
   const grind = document.querySelector('#grindOptions .option-btn.selected')?.textContent || '홀빈';
-  alert(`구매를 진행합니다.\n용량: ${selectedWeight}g | 분쇄: ${grind} | 수량: ${quantity}개`);
+  sessionStorage.setItem('checkout_item', JSON.stringify({
+    name:     document.querySelector('.product-name')?.textContent || '',
+    image:    document.getElementById('mainImage')?.src || '',
+    weight:   selectedWeight,
+    grind:    grind,
+    quantity: quantity,
+    price:    (prices[selectedWeight] || 0) * quantity,
+  }));
+  window.location.href = 'checkout.html';
 }
 
 // ===== 레이더 차트 =====

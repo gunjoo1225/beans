@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>주문서 — 한국엘리스테이블</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">한국엘리스테이블</a>
+    <nav class="nav">
+      <a href="shop.html">Shop</a>
+    </nav>
+  </header>
+
+  <!-- 진행 단계 -->
+  <div class="progress-bar">
+    <div class="progress-step done">장바구니</div>
+    <div class="progress-divider"></div>
+    <div class="progress-step active">주문서 작성</div>
+    <div class="progress-divider"></div>
+    <div class="progress-step">결제 완료</div>
+  </div>
+
+  <main class="checkout-layout">
+
+    <!-- 오른쪽: 주문서 폼 -->
+    <section class="checkout-form-section">
+
+      <!-- 배송 정보 -->
+      <div class="form-block">
+        <h2 class="block-title">배송 정보</h2>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">수령인 <span class="required">*</span></label>
+            <input type="text" id="receiverName" class="checkout-input" placeholder="홍길동" required />
+          </div>
+          <div class="field-group">
+            <label class="field-label">연락처 <span class="required">*</span></label>
+            <input type="tel" id="receiverPhone" class="checkout-input" placeholder="010-0000-0000" required />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">주소 <span class="required">*</span></label>
+          <div class="address-row">
+            <input type="text" id="postcode" class="checkout-input postcode-input" placeholder="우편번호" readonly />
+            <button type="button" class="btn-address-search" onclick="searchAddress()">주소 검색</button>
+          </div>
+          <input type="text" id="address" class="checkout-input" placeholder="기본 주소" readonly style="margin-top:8px" />
+          <input type="text" id="addressDetail" class="checkout-input" placeholder="상세 주소 입력" style="margin-top:8px" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">배송 메모</label>
+          <select id="deliveryMemo" class="checkout-select">
+            <option value="">선택해주세요</option>
+            <option value="문 앞에 놓아주세요">문 앞에 놓아주세요</option>
+            <option value="경비실에 맡겨주세요">경비실에 맡겨주세요</option>
+            <option value="배송 전 연락 바랍니다">배송 전 연락 바랍니다</option>
+            <option value="direct">직접 입력</option>
+          </select>
+          <input type="text" id="deliveryMemoText" class="checkout-input" placeholder="배송 메모를 입력하세요" style="display:none; margin-top:8px" />
+        </div>
+      </div>
+
+      <!-- 결제 수단 -->
+      <div class="form-block">
+        <h2 class="block-title">결제 수단</h2>
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" name="payment" value="card" checked />
+            <div class="payment-card">
+              <span class="payment-icon">💳</span>
+              <span>신용·체크카드</span>
+            </div>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="bank" />
+            <div class="payment-card">
+              <span class="payment-icon">🏦</span>
+              <span>무통장입금</span>
+            </div>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="kakao" />
+            <div class="payment-card">
+              <span class="payment-icon">💛</span>
+              <span>카카오페이</span>
+            </div>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="toss" />
+            <div class="payment-card">
+              <span class="payment-icon">💙</span>
+              <span>토스페이</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- 무통장 입금 안내 -->
+        <div id="bankInfo" class="bank-info" style="display:none">
+          <p class="bank-info-title">입금 계좌 안내</p>
+          <p>국민은행 000-000-000000 (예금주: 한국엘리스테이블)</p>
+          <p>주문 후 <strong>24시간 이내</strong> 입금 확인 후 발송됩니다.</p>
+        </div>
+      </div>
+
+      <!-- 약관 동의 -->
+      <div class="form-block">
+        <h2 class="block-title">약관 동의</h2>
+        <div class="terms-list">
+          <label class="terms-item">
+            <input type="checkbox" id="agreeAll" onchange="toggleAllTerms(this)" />
+            <span class="terms-label bold">전체 동의</span>
+          </label>
+          <div class="terms-divider"></div>
+          <label class="terms-item">
+            <input type="checkbox" class="term-check" required />
+            <span class="terms-label">[필수] 구매조건 확인 및 결제 진행 동의</span>
+          </label>
+          <label class="terms-item">
+            <input type="checkbox" class="term-check" required />
+            <span class="terms-label">[필수] 개인정보 수집·이용 동의</span>
+          </label>
+          <label class="terms-item">
+            <input type="checkbox" class="term-check" />
+            <span class="terms-label">[선택] 마케팅 정보 수신 동의</span>
+          </label>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 왼쪽: 주문 상품 요약 (sticky) -->
+    <aside class="order-summary">
+      <h2 class="block-title">주문 상품</h2>
+
+      <div class="order-item" id="orderItem">
+        <div class="order-item-image">
+          <img id="summaryImage" src="" alt="" />
+        </div>
+        <div class="order-item-info">
+          <p class="order-item-name" id="summaryName">—</p>
+          <p class="order-item-options" id="summaryOptions">—</p>
+          <p class="order-item-price" id="summaryItemPrice">—</p>
+        </div>
+      </div>
+
+      <div class="price-summary">
+        <div class="price-row-summary">
+          <span>상품 금액</span>
+          <span id="summarySubtotal">—</span>
+        </div>
+        <div class="price-row-summary">
+          <span>배송비</span>
+          <span id="summaryShipping">—</span>
+        </div>
+        <div class="price-total-row">
+          <span>최종 결제 금액</span>
+          <span id="summaryTotal">—</span>
+        </div>
+      </div>
+
+      <p class="free-shipping-notice" id="shippingNotice"></p>
+
+      <button class="btn-checkout" onclick="submitOrder()">결제하기</button>
+      <button class="btn-back" onclick="history.back()">← 이전으로</button>
+    </aside>
+
+  </main>
+
+  <script src="js/checkout.js"></script>
+</body>
+</html>

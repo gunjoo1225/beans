@@ -242,5 +242,128 @@ function capitalize(str) {
   return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
 }
 
+// ===== 탭 전환 =====
+function switchAdminTab(tab) {
+  document.getElementById('productsPanel').style.display = tab === 'products' ? '' : 'none';
+  document.getElementById('ordersPanel').style.display   = tab === 'orders'   ? '' : 'none';
+  document.getElementById('tabProducts').classList.toggle('active', tab === 'products');
+  document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
+  if (tab === 'orders') renderOrders('all');
+}
+
+// ===== 주문 이력 =====
+const ORDER_STATUSES = ['주문완료', '배송준비중', '배송중', '배송완료', '취소'];
+const STATUS_COLORS  = {
+  '주문완료':  '#B45309',
+  '배송준비중':'#1D4ED8',
+  '배송중':    '#6D28D9',
+  '배송완료':  '#2D6A4F',
+  '취소':      '#C0392B',
+};
+
+let currentOrderFilter = 'all';
+
+function loadOrders() {
+  return JSON.parse(localStorage.getItem('beans_orders') || '[]');
+}
+
+function renderOrders(filter) {
+  currentOrderFilter = filter;
+  const all    = loadOrders();
+  const orders = filter === 'all' ? all : all.filter(o => o.status === filter);
+  document.getElementById('ordersTotalCount').textContent = orders.length;
+
+  const list = document.getElementById('orderList');
+  if (orders.length === 0) {
+    list.innerHTML = '<div class="empty-list">주문 내역이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = orders.map(o => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div class="order-meta">
+          <span class="order-no">${o.orderNo}</span>
+          <span class="order-date">${formatDate(o.createdAt)}</span>
+        </div>
+        <span class="order-status-badge" style="background:${STATUS_COLORS[o.status] || '#888'}">
+          ${o.status}
+        </span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-info-grid">
+          <div class="order-info-item">
+            <span class="order-info-label">상품</span>
+            <span class="order-info-value">${o.product}</span>
+          </div>
+          <div class="order-info-item">
+            <span class="order-info-label">결제 금액</span>
+            <span class="order-info-value bold">${o.amount}</span>
+          </div>
+          <div class="order-info-item">
+            <span class="order-info-label">결제 수단</span>
+            <span class="order-info-value">${o.payment}</span>
+          </div>
+          <div class="order-info-item">
+            <span class="order-info-label">수령인</span>
+            <span class="order-info-value">${o.receiver} · ${o.phone}</span>
+          </div>
+          <div class="order-info-item full">
+            <span class="order-info-label">배송지</span>
+            <span class="order-info-value">${o.address}</span>
+          </div>
+          ${o.memo ? `
+          <div class="order-info-item full">
+            <span class="order-info-label">배송 메모</span>
+            <span class="order-info-value">${o.memo}</span>
+          </div>` : ''}
+        </div>
+      </div>
+      <div class="order-card-foot">
+        <span class="order-status-label">배송 상태 변경:</span>
+        <div class="order-status-btns">
+          ${ORDER_STATUSES.map(s => `
+            <button class="status-btn ${o.status === s ? 'current' : ''}"
+              onclick="updateOrderStatus('${o.orderNo}', '${s}')"
+              ${o.status === s ? 'disabled' : ''}>
+              ${s}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterOrders(btn, filter) {
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders(filter);
+}
+
+function updateOrderStatus(orderNo, status) {
+  const orders = loadOrders();
+  const idx = orders.findIndex(o => o.orderNo === orderNo);
+  if (idx === -1) return;
+  orders[idx].status = status;
+  localStorage.setItem('beans_orders', JSON.stringify(orders));
+  renderOrders(currentOrderFilter);
+  showToast(`${orderNo} 상태가 "${status}"로 변경되었습니다`);
+}
+
+function updateOrderBadge() {
+  const count = loadOrders().filter(o => o.status === '주문완료').length;
+  const badge = document.getElementById('orderBadge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'inline-flex' : 'none';
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
 // ===== 초기화 =====
 renderList();
+updateOrderBadge();
