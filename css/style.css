@@ -363,6 +363,47 @@ button {
   background-color: #444444;
 }
 
+/* ===== 제품 스토리 & 추출 가이드 ===== */
+.product-story,
+.product-brew {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.story-text {
+  font-size: 14px;
+  color: #4A4A4A;
+  line-height: 1.85;
+}
+
+.brew-guide-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.brew-guide-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  background-color: #F5F2EC;
+}
+
+.brew-guide-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #6B6B6B;
+}
+
+.brew-guide-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
 /* ===== FOOTER ===== */
 .site-footer {
   display: flex;

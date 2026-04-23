@@ -136,6 +136,13 @@ function handleSubmit(e) {
       BODY:    parseInt(document.getElementById('sBody').value),
       ROAST:   parseInt(document.getElementById('sRoast').value),
     },
+    description: document.getElementById('description').value.trim(),
+    brewGuide: {
+      temp:  document.getElementById('brewTemp').value.trim(),
+      ratio: document.getElementById('brewRatio').value.trim(),
+      time:  document.getElementById('brewTime').value.trim(),
+      equip: document.getElementById('brewEquip').value.trim(),
+    },
     image: document.getElementById('imageUrl').value.trim(),
     inStock: document.querySelector('input[name="stock"]:checked').value === 'true',
     createdAt: editingId
@@ -169,6 +176,11 @@ function editProduct(id) {
 
   document.getElementById('imageUrl').value = p.image || '';
   previewImage();
+  document.getElementById('description').value = p.description || '';
+  document.getElementById('brewTemp').value  = p.brewGuide?.temp  || '';
+  document.getElementById('brewRatio').value = p.brewGuide?.ratio || '';
+  document.getElementById('brewTime').value  = p.brewGuide?.time  || '';
+  document.getElementById('brewEquip').value = p.brewGuide?.equip || '';
   document.getElementById('productName').value = p.name;
   document.getElementById('country').value = p.country;
   document.getElementById('area').value = p.area;
