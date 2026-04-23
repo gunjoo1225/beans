@@ -10,35 +10,45 @@ const FREE_SHIPPING_THRESHOLD = 50000;
 
 // ===== 주문서 페이지 초기화 =====
 function initCheckout() {
-  const data = JSON.parse(sessionStorage.getItem('checkout_item') || 'null');
+  // 장바구니(복수) 또는 바로구매(단일) 모두 처리
+  const cartItems  = JSON.parse(sessionStorage.getItem('checkout_cart') || 'null');
+  const singleItem = JSON.parse(sessionStorage.getItem('checkout_item') || 'null');
+  const items      = cartItems || (singleItem ? [singleItem] : []);
 
-  if (data) {
-    document.getElementById('summaryImage').src = data.image || '';
-    document.getElementById('summaryName').textContent = data.name;
-    document.getElementById('summaryOptions').textContent =
-      `${data.weight}g · ${data.grind} · ${data.quantity}개`;
+  if (items.length === 0) return;
+  window._checkoutItems = items;
 
-    const subtotal = data.price;
-    const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
-    const total = subtotal + shipping;
+  // 주문 상품 렌더링
+  const orderItemEl = document.getElementById('orderItem');
+  orderItemEl.innerHTML = items.map(item => `
+    <div style="display:flex;gap:14px;padding:10px 0;border-bottom:1px solid #F5F2EC">
+      <div style="width:64px;height:64px;background:#F0EDE6;flex-shrink:0;overflow:hidden">
+        <img src="${item.image || ''}" style="width:100%;height:100%;object-fit:cover"
+          onerror="this.style.visibility='hidden'" />
+      </div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <p style="font-size:14px;font-weight:600">${item.name}</p>
+        <p style="font-size:12px;color:#6B6B6B">${item.weight}g · ${item.grind} · ${item.quantity}개</p>
+        <p style="font-size:14px;font-weight:500">₩${item.price.toLocaleString('ko-KR')}</p>
+      </div>
+    </div>
+  `).join('');
 
-    document.getElementById('summaryItemPrice').textContent =
-      '₩' + subtotal.toLocaleString('ko-KR');
-    document.getElementById('summarySubtotal').textContent =
-      '₩' + subtotal.toLocaleString('ko-KR');
-    document.getElementById('summaryShipping').textContent =
-      shipping === 0 ? '무료' : '₩' + shipping.toLocaleString('ko-KR');
-    document.getElementById('summaryTotal').textContent =
-      '₩' + total.toLocaleString('ko-KR');
+  const subtotal = items.reduce((s, i) => s + i.price, 0);
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+  const total    = subtotal + shipping;
 
-    const notice = document.getElementById('shippingNotice');
-    if (shipping > 0) {
-      const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
-      notice.textContent = `₩${remaining.toLocaleString('ko-KR')} 더 담으면 무료배송!`;
-    } else {
-      notice.textContent = '✓ 무료배송 적용';
-    }
-  }
+  document.getElementById('summarySubtotal').textContent =
+    '₩' + subtotal.toLocaleString('ko-KR');
+  document.getElementById('summaryShipping').textContent =
+    shipping === 0 ? '무료' : '₩' + shipping.toLocaleString('ko-KR');
+  document.getElementById('summaryTotal').textContent =
+    '₩' + total.toLocaleString('ko-KR');
+
+  const notice = document.getElementById('shippingNotice');
+  notice.textContent = shipping > 0
+    ? `₩${(FREE_SHIPPING_THRESHOLD - subtotal).toLocaleString('ko-KR')} 더 담으면 무료배송!`
+    : '✓ 무료배송 적용';
 
   // 결제 수단 변경 감지
   document.querySelectorAll('input[name="payment"]').forEach(radio => {
@@ -98,8 +108,8 @@ function submitOrder() {
   const memo     = document.getElementById('deliveryMemo').value === 'direct'
     ? document.getElementById('deliveryMemoText').value.trim()
     : document.getElementById('deliveryMemo').value;
-  const data     = JSON.parse(sessionStorage.getItem('checkout_item') || '{}');
-  const subtotal = data.price || 0;
+  const items    = window._checkoutItems || [];
+  const subtotal = items.reduce((s, i) => s + i.price, 0);
   const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
   const total    = subtotal + shipping;
 
@@ -123,6 +133,11 @@ function submitOrder() {
   const orders = JSON.parse(localStorage.getItem('beans_orders') || '[]');
   orders.unshift(order);
   localStorage.setItem('beans_orders', JSON.stringify(orders));
+
+  // 주문 완료 후 장바구니 비우기
+  localStorage.removeItem('beans_cart');
+  sessionStorage.removeItem('checkout_cart');
+  sessionStorage.removeItem('checkout_item');
 
   sessionStorage.setItem('order_complete', JSON.stringify(order));
   window.location.href = 'order-complete.html';

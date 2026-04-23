@@ -43,8 +43,47 @@ function changeQty(delta) {
 
 // ===== 장바구니 =====
 function addToCart() {
-  const grind = document.querySelector('#grindOptions .option-btn.selected')?.textContent || '홀빈';
-  alert(`장바구니에 담겼습니다.\n용량: ${selectedWeight}g | 분쇄: ${grind} | 수량: ${quantity}개`);
+  const grind       = document.querySelector('#grindOptions .option-btn.selected')?.textContent || '홀빈';
+  const productName = document.querySelector('.product-name')?.textContent || '';
+  const productImg  = document.getElementById('mainImage')?.src || '';
+
+  const cart     = JSON.parse(localStorage.getItem('beans_cart') || '[]');
+  const existing = cart.find(i => i.name === productName && i.weight === selectedWeight && i.grind === grind);
+
+  if (existing) {
+    existing.quantity += quantity;
+  } else {
+    cart.push({
+      cartId:    'cart-' + Date.now(),
+      name:      productName,
+      image:     productImg,
+      weight:    selectedWeight,
+      grind,
+      unitPrice: prices[selectedWeight] || 0,
+      quantity,
+    });
+  }
+  localStorage.setItem('beans_cart', JSON.stringify(cart));
+  updateCartBadge();
+  showCartAddedToast(productName);
+}
+
+function showCartAddedToast(name) {
+  let toast = document.getElementById('cartToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'cartToast';
+    toast.className = 'cart-toast';
+    toast.innerHTML = `
+      <span id="cartToastMsg"></span>
+      <button class="cart-toast-link" onclick="window.location.href='cart.html'">장바구니 보기</button>
+    `;
+    document.body.appendChild(toast);
+  }
+  document.getElementById('cartToastMsg').textContent = `"${name}" 담겼습니다`;
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
 // ===== 바로 구매 =====
