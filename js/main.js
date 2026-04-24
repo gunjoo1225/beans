@@ -100,89 +100,26 @@ function buyNow() {
   window.location.href = 'checkout.html';
 }
 
-// ===== 레이더 차트 =====
+// ===== 가로형 막대 차트 =====
+const BAR_COLORS = ['#E8D5F0', '#FAD5BB', '#FAF0C0', '#C5E6C8', '#D9CFC5', '#D9C0A8'];
+
 function drawFlavorChart(chartData) {
-  const data = chartData || DEFAULT_CHART;
-  const svg = document.getElementById('flavorChart');
-  svg.innerHTML = '';
-
-  const cx = 150, cy = 150, maxR = 95, levels = 4;
-  const ns = 'http://www.w3.org/2000/svg';
+  const data    = chartData || DEFAULT_CHART;
+  const wrap    = document.getElementById('flavorChart');
   const flavors = Object.entries(data).map(([label, value]) => ({ label, value }));
-  const n = flavors.length;
-  const step = (2 * Math.PI) / n;
-  const startAngle = -Math.PI / 2;
 
-  function getPoint(i, r) {
-    const angle = startAngle + i * step;
-    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
-  }
-
-  function el(tag, attrs) {
-    const e = document.createElementNS(ns, tag);
-    Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
-    return e;
-  }
-
-  // 그리드 다각형
-  for (let l = levels; l >= 1; l--) {
-    const r = (maxR * l) / levels;
-    const pts = Array.from({ length: n }, (_, i) => {
-      const p = getPoint(i, r);
-      return `${p.x},${p.y}`;
-    }).join(' ');
-    svg.appendChild(el('polygon', {
-      points: pts,
-      fill: l % 2 === 0 ? '#F5F2EC' : 'none',
-      stroke: '#E8E4DC',
-      'stroke-width': '1',
-    }));
-  }
-
-  // 축 선
-  flavors.forEach((_, i) => {
-    const p = getPoint(i, maxR);
-    svg.appendChild(el('line', {
-      x1: cx, y1: cy, x2: p.x, y2: p.y,
-      stroke: '#E8E4DC', 'stroke-width': '1',
-    }));
-  });
-
-  // 데이터 다각형
-  const dataPts = flavors.map((f, i) => {
-    const p = getPoint(i, (f.value / 10) * maxR);
-    return `${p.x},${p.y}`;
-  }).join(' ');
-  svg.appendChild(el('polygon', {
-    points: dataPts,
-    fill: 'rgba(26,26,26,0.08)',
-    stroke: '#1A1A1A',
-    'stroke-width': '1.5',
-    'stroke-linejoin': 'round',
-  }));
-
-  // 데이터 점
-  flavors.forEach((f, i) => {
-    const p = getPoint(i, (f.value / 10) * maxR);
-    svg.appendChild(el('circle', { cx: p.x, cy: p.y, r: '3', fill: '#1A1A1A' }));
-  });
-
-  // 라벨
-  flavors.forEach((f, i) => {
-    const p = getPoint(i, maxR + 22);
-    const text = el('text', {
-      x: p.x, y: p.y,
-      'text-anchor': 'middle',
-      'dominant-baseline': 'middle',
-      'font-size': '9.5',
-      'font-weight': '600',
-      'letter-spacing': '0.06em',
-      fill: '#6B6B6B',
-      'font-family': 'Inter, -apple-system, sans-serif',
-    });
-    text.textContent = f.label;
-    svg.appendChild(text);
-  });
+  wrap.innerHTML = flavors.map(({ label, value }, i) => {
+    const pct   = Math.round((value / 10) * 100);
+    const color = BAR_COLORS[i % BAR_COLORS.length];
+    return `
+      <div class="fbar-row">
+        <span class="fbar-label">${label}</span>
+        <div class="fbar-track">
+          <div class="fbar-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+        <span class="fbar-value">${value}</span>
+      </div>`;
+  }).join('');
 }
 
 // ===== URL 파라미터로 제품 로드 =====

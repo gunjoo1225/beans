@@ -8,6 +8,28 @@ const PAYMENT_LABELS = {
 const SHIPPING_FEE = 3000;
 const FREE_SHIPPING_THRESHOLD = 50000;
 
+// ===== 로그인 정보 자동 입력 =====
+function prefillFromSession() {
+  const session = getSession();
+  if (!session) return;
+
+  const nameEl  = document.getElementById('receiverName');
+  const emailEl = document.getElementById('receiverEmail');
+
+  if (nameEl  && !nameEl.value)  nameEl.value  = session.name;
+  if (emailEl && !emailEl.value) emailEl.value = session.email;
+
+  // 안내 배너 삽입 (이미 있으면 skip)
+  if (document.getElementById('loginPrefillNotice')) return;
+  const block = document.querySelector('.form-block');
+  if (!block) return;
+  const notice = document.createElement('p');
+  notice.id = 'loginPrefillNotice';
+  notice.style.cssText = 'font-size:13px;color:#2D6A4F;margin:0 0 16px;padding:10px 14px;background:#F0FAF4;border-left:3px solid #2D6A4F;';
+  notice.textContent = `${session.name}님의 로그인 정보로 자동 입력되었습니다.`;
+  block.insertBefore(notice, block.firstChild);
+}
+
 // ===== 주문서 페이지 초기화 =====
 function initCheckout() {
   // 장바구니(복수) 또는 바로구매(단일) 모두 처리
@@ -63,6 +85,8 @@ function initCheckout() {
     document.getElementById('deliveryMemoText').style.display =
       this.value === 'direct' ? 'block' : 'none';
   });
+
+  prefillFromSession();
 }
 
 // ===== 주소 검색 (Daum Postcode) =====

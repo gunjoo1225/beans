@@ -384,28 +384,58 @@ button {
   margin-bottom: 10px;
 }
 
-/* ===== 레이더 차트 ===== */
+/* ===== 가로형 막대 차트 ===== */
 .flavor-body {
   display: flex;
+  flex-direction: column;
   gap: 20px;
+}
+
+.flavor-bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fbar-row {
+  display: grid;
+  grid-template-columns: 72px 1fr 28px;
   align-items: center;
+  gap: 10px;
 }
 
-.flavor-chart-wrap {
-  width: 170px;
-  flex-shrink: 0;
+.fbar-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #6B6B6B;
+  text-align: right;
 }
 
-.flavor-chart-wrap svg {
-  width: 100%;
-  height: auto;
+.fbar-track {
+  height: 14px;
+  background: #F0EDE6;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.fbar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.fbar-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: #9B9B9B;
+  text-align: left;
 }
 
 .flavor-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 8px;
-  flex: 1;
 }
 
 .flavor-tag {
