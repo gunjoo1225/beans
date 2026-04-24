@@ -64,6 +64,7 @@ function renderAdminAccounts() {
   document.getElementById('adminAccountList').innerHTML = accounts.map(a => `
     <div class="admin-account-row">
       <span class="admin-account-id">${a.id} ${a.id === session.id ? '<span class="admin-account-me">(현재 계정)</span>' : ''}</span>
+      <span class="admin-account-pw">${a.password}</span>
       ${a.id !== session.id ? `<button class="btn-delete" onclick="deleteAdminAccount('${a.id}')">삭제</button>` : ''}
     </div>
   `).join('');
