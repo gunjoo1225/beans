@@ -657,14 +657,13 @@ button {
 
 .footer-admin-link {
   font-size: 11px;
-  color: #FAF8F4;
+  color: #AAAAAA;
   text-decoration: none;
   transition: color 0.3s;
-  user-select: none;
 }
 
 .footer-admin-link:hover {
-  color: #AAAAAA;
+  color: #FAF8F4;
 }
 
 /* ===== 햄버거 버튼 (PC에서 숨김) ===== */
@@ -788,6 +787,10 @@ button {
   .mobile-nav-link:hover {
     background-color: #F5F2EC;
     color: #1A1A1A;
+  }
+  .mobile-nav-link--admin {
+    font-size: 13px;
+    color: #AAAAAA;
   }
 
   /* 기타 */
