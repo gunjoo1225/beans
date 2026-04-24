@@ -101,7 +101,14 @@ function buyNow() {
 }
 
 // ===== 가로형 막대 차트 =====
-const BAR_COLORS = ['#E8D5F0', '#FAD5BB', '#FAF0C0', '#C5E6C8', '#D9CFC5', '#D9C0A8'];
+const BAR_GRADIENTS = [
+  'linear-gradient(90deg,#B89FD8,#DEC8F5)',
+  'linear-gradient(90deg,#E8956A,#FAC9A8)',
+  'linear-gradient(90deg,#D4A820,#F5E080)',
+  'linear-gradient(90deg,#5CA862,#A8D8AC)',
+  'linear-gradient(90deg,#A08878,#CEC0B4)',
+  'linear-gradient(90deg,#A06840,#CCA07A)',
+];
 
 function drawFlavorChart(chartData) {
   const data    = chartData || DEFAULT_CHART;
@@ -109,15 +116,17 @@ function drawFlavorChart(chartData) {
   const flavors = Object.entries(data).map(([label, value]) => ({ label, value }));
 
   wrap.innerHTML = flavors.map(({ label, value }, i) => {
-    const pct   = Math.round((value / 10) * 100);
-    const color = BAR_COLORS[i % BAR_COLORS.length];
+    const pct  = Math.round((value / 10) * 100);
+    const grad = BAR_GRADIENTS[i % BAR_GRADIENTS.length];
     return `
       <div class="fbar-row">
-        <span class="fbar-label">${label}</span>
-        <div class="fbar-track">
-          <div class="fbar-fill" style="width:${pct}%;background:${color}"></div>
+        <div class="fbar-header">
+          <span class="fbar-label">${label}</span>
+          <span class="fbar-value">${value}<span class="fbar-max">/10</span></span>
         </div>
-        <span class="fbar-value">${value}</span>
+        <div class="fbar-track">
+          <div class="fbar-fill" style="width:${pct}%;background:${grad}"></div>
+        </div>
       </div>`;
   }).join('');
 }

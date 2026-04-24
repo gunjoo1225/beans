@@ -394,42 +394,53 @@ button {
 .flavor-bar-chart {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 13px;
 }
 
 .fbar-row {
-  display: grid;
-  grid-template-columns: 72px 1fr 28px;
-  align-items: center;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fbar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .fbar-label {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #6B6B6B;
-  text-align: right;
+  letter-spacing: 0.1em;
+  color: #8A8480;
+  text-transform: uppercase;
+}
+
+.fbar-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 1;
+}
+
+.fbar-max {
+  font-size: 10px;
+  font-weight: 400;
+  color: #B8B0A8;
 }
 
 .fbar-track {
-  height: 14px;
-  background: #F0EDE6;
-  border-radius: 2px;
+  height: 8px;
+  background: #EDE9E2;
+  border-radius: 99px;
   overflow: hidden;
 }
 
 .fbar-fill {
   height: 100%;
-  border-radius: 2px;
-  transition: width 0.5s ease;
-}
-
-.fbar-value {
-  font-size: 11px;
-  font-weight: 600;
-  color: #9B9B9B;
-  text-align: left;
+  border-radius: 99px;
+  transition: width 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .flavor-tags {
