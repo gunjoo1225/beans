@@ -209,8 +209,10 @@ function loadProductFromUrl() {
   const p = allProducts.find(prod => prod.id === id);
   if (!p) return;
 
-  // 페이지 타이틀
+  // 페이지 타이틀 + 브레드크럼
   document.title = `${p.name} — 한국엘리스테이블`;
+  const bc = document.getElementById('breadcrumbProduct');
+  if (bc) bc.textContent = p.name;
 
   // 상품 기본 정보
   document.querySelector('.product-region').textContent =

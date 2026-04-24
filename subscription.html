@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscription — 한국엘리스테이블</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/subscription.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">한국엘리스테이블</a>
+    <nav class="nav">
+      <a href="index.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="subscription.html" class="active">Subscription</a>
+    </nav>
+    <div class="header-right" id="headerAuthArea"></div>
+  </header>
+
+  <!-- HERO -->
+  <section class="sub-hero">
+    <p class="sub-hero-label">SUBSCRIPTION</p>
+    <h1 class="sub-hero-title">매달, 최고의 원두를<br>문 앞으로</h1>
+    <p class="sub-hero-desc">허니버스트의 큐레이션 원두를 정기 구독하거나<br>카페 파트너로 함께 성장하세요.</p>
+    <div class="sub-hero-tabs">
+      <button class="hero-tab active" onclick="scrollToSection('personal')">개인 구독</button>
+      <button class="hero-tab" onclick="scrollToSection('partner')">카페 파트너</button>
+    </div>
+  </section>
+
+  <!-- ======================== -->
+  <!-- A. 개인 구독              -->
+  <!-- ======================== -->
+  <section class="sub-section" id="personal">
+    <div class="sub-inner">
+      <div class="sub-section-header">
+        <p class="section-label">PERSONAL</p>
+        <h2 class="sub-heading">개인 구독</h2>
+        <p class="sub-desc">취향에 맞는 플랜을 선택하면 매달 신선하게 로스팅한 원두를 배송해 드립니다.<br>구독 시 <strong>정가 대비 10% 할인</strong>이 적용됩니다.</p>
+      </div>
+
+      <!-- 배송 주기 토글 -->
+      <div class="frequency-toggle">
+        <button class="freq-btn active" id="freq1" onclick="setFrequency(1)">월 1회</button>
+        <button class="freq-btn" id="freq2" onclick="setFrequency(2)">월 2회</button>
+      </div>
+
+      <!-- 플랜 카드 -->
+      <div class="plan-cards">
+
+        <div class="plan-card" id="plan-light">
+          <div class="plan-card-inner">
+            <p class="plan-name">라이트</p>
+            <p class="plan-weight">200g</p>
+            <p class="plan-price-wrap">
+              <span class="plan-price" id="price-light">₩16,200</span>
+              <span class="plan-price-unit">/회</span>
+            </p>
+            <p class="plan-original" id="original-light">정가 ₩18,000</p>
+            <ul class="plan-features">
+              <li>허니버스트 큐레이션 원두</li>
+              <li>분쇄 방식 선택 가능</li>
+              <li>매월 취향 리포트 제공</li>
+            </ul>
+            <button class="btn-plan" onclick="openPersonalForm('라이트', '200g')">이 플랜 선택</button>
+          </div>
+        </div>
+
+        <div class="plan-card plan-card--featured" id="plan-standard">
+          <div class="plan-badge">가장 인기</div>
+          <div class="plan-card-inner">
+            <p class="plan-name">스탠다드</p>
+            <p class="plan-weight">500g</p>
+            <p class="plan-price-wrap">
+              <span class="plan-price" id="price-standard">₩34,200</span>
+              <span class="plan-price-unit">/회</span>
+            </p>
+            <p class="plan-original" id="original-standard">정가 ₩38,000</p>
+            <ul class="plan-features">
+              <li>허니버스트 큐레이션 원두</li>
+              <li>분쇄 방식 선택 가능</li>
+              <li>매월 취향 리포트 제공</li>
+              <li>산지 노트 카드 동봉</li>
+            </ul>
+            <button class="btn-plan btn-plan--featured" onclick="openPersonalForm('스탠다드', '500g')">이 플랜 선택</button>
+          </div>
+        </div>
+
+        <div class="plan-card" id="plan-premium">
+          <div class="plan-card-inner">
+            <p class="plan-name">프리미엄</p>
+            <p class="plan-weight">1kg</p>
+            <p class="plan-price-wrap">
+              <span class="plan-price" id="price-premium">₩61,200</span>
+              <span class="plan-price-unit">/회</span>
+            </p>
+            <p class="plan-original" id="original-premium">정가 ₩68,000</p>
+            <ul class="plan-features">
+              <li>허니버스트 큐레이션 원두</li>
+              <li>분쇄 방식 선택 가능</li>
+              <li>매월 취향 리포트 제공</li>
+              <li>산지 노트 카드 동봉</li>
+              <li>신규 원두 우선 체험 기회</li>
+            </ul>
+            <button class="btn-plan" onclick="openPersonalForm('프리미엄', '1kg')">이 플랜 선택</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 개인 구독 신청 폼 (숨김) -->
+      <div class="inline-form" id="personalForm" style="display:none">
+        <div class="inline-form-header">
+          <h3 class="inline-form-title" id="personalFormTitle">구독 신청</h3>
+          <button class="inline-form-close" onclick="closePersonalForm()">×</button>
+        </div>
+        <div class="inline-form-body">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">이름 <span class="required">*</span></label>
+              <input type="text" id="pName" class="form-input" placeholder="홍길동" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">연락처 <span class="required">*</span></label>
+              <input type="tel" id="pPhone" class="form-input" placeholder="010-0000-0000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일 <span class="required">*</span></label>
+            <input type="email" id="pEmail" class="form-input" placeholder="example@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">분쇄 방식</label>
+            <div class="option-buttons">
+              <button type="button" class="option-btn selected" id="grind-whole" onclick="selectGrind(this)">홀빈</button>
+              <button type="button" class="option-btn" onclick="selectGrind(this)">에스프레소</button>
+              <button type="button" class="option-btn" onclick="selectGrind(this)">드립</button>
+              <button type="button" class="option-btn" onclick="selectGrind(this)">콜드브루</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">커피 취향 (선택)</label>
+            <textarea class="form-textarea" id="pTaste" rows="2" placeholder="예) 산미 없는 고소한 커피, 플로럴하고 밝은 커피 등"></textarea>
+          </div>
+          <p class="form-error" id="personalError"></p>
+          <button class="btn-submit-form" onclick="submitPersonal()">구독 신청하기</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 구분선 -->
+  <div class="section-divider">
+    <span>또는</span>
+  </div>
+
+  <!-- ======================== -->
+  <!-- B. 카페 파트너            -->
+  <!-- ======================== -->
+  <section class="sub-section sub-section--dark" id="partner">
+    <div class="sub-inner">
+      <div class="sub-section-header">
+        <p class="section-label" style="color:#8B8B6B;">CAFÉ PARTNER</p>
+        <h2 class="sub-heading" style="color:#FAF8F4;">카페 파트너 납품 구독</h2>
+        <p class="sub-desc" style="color:#AAAAAA;">허니버스트와 함께하는 파트너 매장은 원두 납품 외에도<br>운영 전반에 걸친 맞춤 지원을 받을 수 있습니다.</p>
+      </div>
+
+      <div class="partner-layout">
+
+        <!-- 혜택 목록 -->
+        <div class="partner-benefits">
+          <div class="benefit-item">
+            <span class="benefit-icon">☕</span>
+            <div>
+              <p class="benefit-title">커스텀 로스팅</p>
+              <p class="benefit-desc">매장 컨셉에 맞춘 전용 프로파일로 로스팅합니다.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">⚙️</span>
+            <div>
+              <p class="benefit-title">머신 셋팅 지원</p>
+              <p class="benefit-desc">초기 납품 시 매장 방문, 최적 분쇄도·머신 셋팅을 직접 잡아드립니다.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">📋</span>
+            <div>
+              <p class="benefit-title">운영 컨설팅</p>
+              <p class="benefit-desc">선릉역 12년 운영 노하우, 메뉴 레시피, 직원 교육까지 지원합니다.</p>
+            </div>
+          </div>
+          <div class="benefit-item">
+            <span class="benefit-icon">🤝</span>
+            <div>
+              <p class="benefit-title">정기 방문 사후관리</p>
+              <p class="benefit-desc">납품 후에도 정기적으로 방문하여 품질을 함께 관리합니다.</p>
+            </div>
+          </div>
+          <div class="partner-quote">
+            "고객의 성공이 우리의 성공입니다."
+          </div>
+        </div>
+
+        <!-- 상담 신청 폼 -->
+        <div class="partner-form-wrap">
+          <h3 class="partner-form-title">파트너 상담 신청</h3>
+          <p class="partner-form-sub">작성해주시면 2영업일 내 연락드립니다.</p>
+
+          <div class="form-group">
+            <label class="form-label form-label--light">대표자 이름 <span class="required">*</span></label>
+            <input type="text" id="bName" class="form-input form-input--dark" placeholder="홍길동" />
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label form-label--light">연락처 <span class="required">*</span></label>
+              <input type="tel" id="bPhone" class="form-input form-input--dark" placeholder="010-0000-0000" />
+            </div>
+            <div class="form-group">
+              <label class="form-label form-label--light">이메일</label>
+              <input type="email" id="bEmail" class="form-input form-input--dark" placeholder="example@email.com" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--light">매장명 <span class="required">*</span></label>
+            <input type="text" id="bStore" class="form-input form-input--dark" placeholder="카페 이름" />
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--light">매장 규모</label>
+            <div class="option-buttons">
+              <button type="button" class="option-btn option-btn--dark selected" onclick="selectScale(this)">소규모 (1~2인)</button>
+              <button type="button" class="option-btn option-btn--dark" onclick="selectScale(this)">중규모 (3~5인)</button>
+              <button type="button" class="option-btn option-btn--dark" onclick="selectScale(this)">대규모 (6인+)</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label form-label--light">문의 내용</label>
+            <textarea class="form-textarea form-textarea--dark" id="bMessage" rows="3" placeholder="현재 사용 원두, 납품 희망 수량, 궁금한 점 등을 자유롭게 적어주세요."></textarea>
+          </div>
+          <p class="form-error" id="partnerError" style="color:#F87171;"></p>
+          <button class="btn-partner-submit" onclick="submitPartner()">상담 신청하기</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-info">
+      <p class="footer-brand">한국엘리스테이블 · 허니버스트</p>
+      <p class="footer-copy">국내 1세대 로스터리 café namoo에서 시작, 18년 경력의 원두 전문 브랜드 · 전국 40여개 카페 납품</p>
+      <p class="footer-copy">© 2025 한국엘리스테이블. All rights reserved.</p>
+    </div>
+    <a href="admin.html" class="footer-admin-link">관리자</a>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    // 구독 페이지 로직
+
+    // 배송 주기
+    let frequency = 1;
+    const BASE = { light: 18000, standard: 38000, premium: 68000 };
+
+    function setFrequency(n) {
+      frequency = n;
+      document.getElementById('freq1').classList.toggle('active', n === 1);
+      document.getElementById('freq2').classList.toggle('active', n === 2);
+      updatePrices();
+    }
+
+    function updatePrices() {
+      const disc = 0.9;
+      ['light','standard','premium'].forEach(key => {
+        const base = BASE[key];
+        const total = Math.round(base * frequency * disc / 100) * 100;
+        const orig  = base * frequency;
+        document.getElementById(`price-${key}`).textContent     = '₩' + total.toLocaleString('ko-KR');
+        document.getElementById(`original-${key}`).textContent  = '정가 ₩' + orig.toLocaleString('ko-KR');
+      });
+    }
+
+    // 개인 구독 폼
+    let selectedPlan = '', selectedWeight = '';
+
+    function openPersonalForm(plan, weight) {
+      selectedPlan = plan; selectedWeight = weight;
+      document.getElementById('personalFormTitle').textContent = `${plan} 플랜 구독 신청 (${weight} · 월 ${frequency}회)`;
+      document.getElementById('personalForm').style.display = '';
+      document.getElementById('personalForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function closePersonalForm() {
+      document.getElementById('personalForm').style.display = 'none';
+      document.getElementById('personalError').textContent = '';
+    }
+
+    function selectGrind(btn) {
+      document.querySelectorAll('#personalForm .option-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function submitPersonal() {
+      const name  = document.getElementById('pName').value.trim();
+      const phone = document.getElementById('pPhone').value.trim();
+      const email = document.getElementById('pEmail').value.trim();
+      const grind = document.querySelector('#personalForm .option-btn.selected')?.textContent || '홀빈';
+      const taste = document.getElementById('pTaste').value.trim();
+      const err   = document.getElementById('personalError');
+
+      if (!name || !phone || !email) { err.textContent = '이름, 연락처, 이메일을 입력해주세요.'; return; }
+
+      const subs = JSON.parse(localStorage.getItem('beans_subscriptions') || '[]');
+      subs.push({
+        type: 'personal', plan: selectedPlan, weight: selectedWeight,
+        frequency, name, phone, email, grind, taste,
+        createdAt: new Date().toISOString(), status: '신청완료'
+      });
+      localStorage.setItem('beans_subscriptions', JSON.stringify(subs));
+
+      closePersonalForm();
+      document.getElementById('pName').value = '';
+      document.getElementById('pPhone').value = '';
+      document.getElementById('pEmail').value = '';
+      document.getElementById('pTaste').value = '';
+      showToast(`${selectedPlan} 플랜 구독 신청이 완료되었습니다.`);
+    }
+
+    // 카페 파트너 폼
+    function selectScale(btn) {
+      document.querySelectorAll('.option-btn--dark').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    function submitPartner() {
+      const name    = document.getElementById('bName').value.trim();
+      const phone   = document.getElementById('bPhone').value.trim();
+      const email   = document.getElementById('bEmail').value.trim();
+      const store   = document.getElementById('bStore').value.trim();
+      const scale   = document.querySelector('.option-btn--dark.selected')?.textContent || '';
+      const message = document.getElementById('bMessage').value.trim();
+      const err     = document.getElementById('partnerError');
+
+      if (!name || !phone || !store) { err.textContent = '이름, 연락처, 매장명을 입력해주세요.'; return; }
+
+      const partners = JSON.parse(localStorage.getItem('beans_partners') || '[]');
+      partners.push({ name, phone, email, store, scale, message, createdAt: new Date().toISOString(), status: '상담대기' });
+      localStorage.setItem('beans_partners', JSON.stringify(partners));
+
+      document.getElementById('bName').value = '';
+      document.getElementById('bPhone').value = '';
+      document.getElementById('bEmail').value = '';
+      document.getElementById('bStore').value = '';
+      document.getElementById('bMessage').value = '';
+      err.textContent = '';
+      showToast('파트너 상담 신청이 완료되었습니다. 2영업일 내 연락드리겠습니다.');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+  </script>
+
+</body>
+</html>

@@ -133,7 +133,7 @@ function renderProducts(products) {
     return;
   }
   grid.innerHTML = products.map(p => `
-    <a href="index.html?id=${p.id}" class="product-card" data-roast="${p.roast}">
+    <a href="product.html?id=${p.id}" class="product-card" data-roast="${p.roast}">
       <div class="card-image">
         <img src="${p.image || ''}" alt="${p.name}"
           onerror="this.style.visibility='hidden'" />

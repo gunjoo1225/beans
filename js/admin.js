@@ -2,6 +2,73 @@ const STORAGE_KEY = 'beans_products';
 let currentTags = [];
 let editingId = null;
 
+// ===== 관리자 인증 =====
+function initAdminAccounts() {
+  if (!localStorage.getItem('beans_admin_accounts')) {
+    localStorage.setItem('beans_admin_accounts', JSON.stringify([{ id: 'admin', password: 'admin' }]));
+  }
+}
+
+function checkAdminAuth() {
+  const ok = sessionStorage.getItem('beans_admin_session');
+  document.getElementById('adminLoginGate').style.display = ok ? 'none' : 'flex';
+}
+
+function adminLogin() {
+  const id  = document.getElementById('adminLoginId').value.trim();
+  const pw  = document.getElementById('adminLoginPw').value;
+  const err = document.getElementById('adminLoginError');
+  const accounts = JSON.parse(localStorage.getItem('beans_admin_accounts') || '[]');
+  const match = accounts.find(a => a.id === id && a.password === pw);
+  if (!match) { err.textContent = '아이디 또는 비밀번호가 올바르지 않습니다.'; return; }
+  sessionStorage.setItem('beans_admin_session', JSON.stringify({ id }));
+  document.getElementById('adminLoginGate').style.display = 'none';
+}
+
+function adminLogout() {
+  sessionStorage.removeItem('beans_admin_session');
+  document.getElementById('adminLoginId').value = '';
+  document.getElementById('adminLoginPw').value = '';
+  document.getElementById('adminLoginError').textContent = '';
+  document.getElementById('adminLoginGate').style.display = 'flex';
+}
+
+function addAdminAccount() {
+  const id  = document.getElementById('newAdminId').value.trim();
+  const pw  = document.getElementById('newAdminPw').value;
+  const err = document.getElementById('adminAddError');
+  if (!id || !pw) { err.textContent = '아이디와 비밀번호를 모두 입력하세요.'; return; }
+  const accounts = JSON.parse(localStorage.getItem('beans_admin_accounts') || '[]');
+  if (accounts.find(a => a.id === id)) { err.textContent = '이미 존재하는 아이디입니다.'; return; }
+  accounts.push({ id, password: pw });
+  localStorage.setItem('beans_admin_accounts', JSON.stringify(accounts));
+  document.getElementById('newAdminId').value = '';
+  document.getElementById('newAdminPw').value = '';
+  err.textContent = '';
+  renderAdminAccounts();
+  showToast(`관리자 "${id}" 추가 완료`);
+}
+
+function deleteAdminAccount(id) {
+  const accounts = JSON.parse(localStorage.getItem('beans_admin_accounts') || '[]');
+  if (accounts.length <= 1) { showToast('최소 1개의 관리자 계정이 필요합니다.'); return; }
+  if (!confirm(`"${id}" 계정을 삭제하시겠습니까?`)) return;
+  localStorage.setItem('beans_admin_accounts', JSON.stringify(accounts.filter(a => a.id !== id)));
+  renderAdminAccounts();
+  showToast(`관리자 "${id}" 삭제 완료`);
+}
+
+function renderAdminAccounts() {
+  const accounts = JSON.parse(localStorage.getItem('beans_admin_accounts') || '[]');
+  const session  = JSON.parse(sessionStorage.getItem('beans_admin_session') || '{}');
+  document.getElementById('adminAccountList').innerHTML = accounts.map(a => `
+    <div class="admin-account-row">
+      <span class="admin-account-id">${a.id} ${a.id === session.id ? '<span class="admin-account-me">(현재 계정)</span>' : ''}</span>
+      ${a.id !== session.id ? `<button class="btn-delete" onclick="deleteAdminAccount('${a.id}')">삭제</button>` : ''}
+    </div>
+  `).join('');
+}
+
 // ===== localStorage 헬퍼 =====
 function loadProducts() {
   return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -255,12 +322,24 @@ function capitalize(str) {
 }
 
 // ===== 탭 전환 =====
+const ALL_TABS = ['products', 'orders', 'members', 'subs', 'partners', 'settings'];
 function switchAdminTab(tab) {
-  document.getElementById('productsPanel').style.display = tab === 'products' ? '' : 'none';
-  document.getElementById('ordersPanel').style.display   = tab === 'orders'   ? '' : 'none';
-  document.getElementById('tabProducts').classList.toggle('active', tab === 'products');
-  document.getElementById('tabOrders').classList.toggle('active', tab === 'orders');
-  if (tab === 'orders') renderOrders('all');
+  ALL_TABS.forEach(t => {
+    const panel = document.getElementById(t === 'products' ? 'productsPanel'
+                : t === 'orders'   ? 'ordersPanel'
+                : t === 'members'  ? 'membersPanel'
+                : t === 'subs'     ? 'subsPanel'
+                : t === 'partners' ? 'partnersPanel'
+                : 'settingsPanel');
+    const btn = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (panel) panel.style.display = t === tab ? '' : 'none';
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+  if (tab === 'orders')   renderOrders('all');
+  if (tab === 'members')  renderMembers();
+  if (tab === 'subs')     renderSubs();
+  if (tab === 'partners') renderPartners();
+  if (tab === 'settings') renderAdminAccounts();
 }
 
 // ===== 주문 이력 =====
@@ -376,6 +455,190 @@ function formatDate(iso) {
   return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
 }
 
+// ===== 회원 관리 =====
+function loadMembers() {
+  return JSON.parse(localStorage.getItem('beans_users') || '[]');
+}
+
+function updateMemberBadge() {
+  const count = loadMembers().length;
+  const badge = document.getElementById('memberBadge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'inline-flex' : 'none';
+  document.getElementById('memberCount').textContent = count;
+}
+
+let selectedMemberEmail = null;
+
+function renderMembers() {
+  updateMemberBadge();
+  const members = loadMembers();
+  const orders  = loadOrders();
+  const list    = document.getElementById('memberList');
+
+  if (members.length === 0) {
+    list.innerHTML = '<div class="empty-list">가입한 회원이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = members.map(m => {
+    const orderCount = orders.filter(o => o.email && o.email === m.email).length;
+    const isSelected = m.email === selectedMemberEmail;
+    return `
+      <div class="member-row ${isSelected ? 'member-row--active' : ''}"
+           onclick="selectMember('${m.email}')">
+        <div class="member-avatar">${m.name.charAt(0)}</div>
+        <div class="member-info">
+          <p class="member-name">${m.name}</p>
+          <p class="member-email">${m.email}</p>
+          <p class="member-meta">가입일 ${formatDate(m.joinedAt)}</p>
+        </div>
+        <div class="member-order-count">
+          <span class="member-order-num">${orderCount}</span>
+          <span class="member-order-label">건</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectMember(email) {
+  selectedMemberEmail = email;
+  renderMembers();
+
+  const members = loadMembers();
+  const member  = members.find(m => m.email === email);
+  const orders  = loadOrders().filter(o => o.email === email);
+  const panel   = document.getElementById('memberDetailPanel');
+
+  if (!member) return;
+
+  const orderHtml = orders.length === 0
+    ? '<div class="empty-list" style="border:none;">이 회원의 주문 이력이 없습니다.</div>'
+    : orders.map(o => `
+        <div class="member-order-card">
+          <div class="member-order-card-top">
+            <div class="order-meta">
+              <span class="order-no">${o.orderNo}</span>
+              <span class="order-date">${formatDate(o.createdAt)}</span>
+            </div>
+            <span class="order-status-badge" style="background:${STATUS_COLORS[o.status] || '#888'}">
+              ${o.status}
+            </span>
+          </div>
+          <div class="member-order-card-body">
+            <div class="order-info-grid">
+              <div class="order-info-item">
+                <span class="order-info-label">상품</span>
+                <span class="order-info-value">${o.product}</span>
+              </div>
+              <div class="order-info-item">
+                <span class="order-info-label">결제 금액</span>
+                <span class="order-info-value bold">${o.amount}</span>
+              </div>
+              <div class="order-info-item">
+                <span class="order-info-label">결제 수단</span>
+                <span class="order-info-value">${o.payment}</span>
+              </div>
+              <div class="order-info-item">
+                <span class="order-info-label">배송지</span>
+                <span class="order-info-value">${o.address}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+  panel.innerHTML = `
+    <div class="member-detail-header">
+      <div class="member-detail-avatar">${member.name.charAt(0)}</div>
+      <div>
+        <p class="member-detail-name">${member.name}</p>
+        <p class="member-detail-email">${member.email}</p>
+        <p class="member-detail-joined">가입일 · ${formatDate(member.joinedAt)}</p>
+      </div>
+    </div>
+    <div class="member-detail-orders-header">
+      <p class="section-label" style="margin:0;">주문 이력 (${orders.length}건)</p>
+    </div>
+    <div class="member-detail-orders">
+      ${orderHtml}
+    </div>
+  `;
+}
+
+// ===== 구독 신청 =====
+function renderSubs() {
+  const subs = JSON.parse(localStorage.getItem('beans_subscriptions') || '[]');
+  document.getElementById('subsTotalCount').textContent = subs.length;
+  const el = document.getElementById('subsList');
+  if (subs.length === 0) { el.innerHTML = '<div class="empty-list">구독 신청 내역이 없습니다.</div>'; return; }
+  el.innerHTML = subs.map((s, i) => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div class="order-meta">
+          <span class="order-no">${s.name} · ${s.email}</span>
+          <span class="order-date">${formatDate(s.createdAt)}</span>
+        </div>
+        <span class="order-status-badge" style="background:#1D4ED8">${s.status || '신청완료'}</span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-info-grid">
+          <div class="order-info-item"><span class="order-info-label">플랜</span><span class="order-info-value bold">${s.plan} · ${s.weight}</span></div>
+          <div class="order-info-item"><span class="order-info-label">배송 주기</span><span class="order-info-value">월 ${s.frequency}회</span></div>
+          <div class="order-info-item"><span class="order-info-label">분쇄 방식</span><span class="order-info-value">${s.grind}</span></div>
+          <div class="order-info-item"><span class="order-info-label">연락처</span><span class="order-info-value">${s.phone}</span></div>
+          ${s.taste ? `<div class="order-info-item full"><span class="order-info-label">취향 메모</span><span class="order-info-value">${s.taste}</span></div>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== 파트너 상담 =====
+function renderPartners() {
+  const partners = JSON.parse(localStorage.getItem('beans_partners') || '[]');
+  document.getElementById('partnersTotalCount').textContent = partners.length;
+  const el = document.getElementById('partnersList');
+  if (partners.length === 0) { el.innerHTML = '<div class="empty-list">파트너 상담 신청 내역이 없습니다.</div>'; return; }
+  el.innerHTML = partners.map((p, i) => `
+    <div class="order-card">
+      <div class="order-card-top">
+        <div class="order-meta">
+          <span class="order-no">${p.store} · ${p.name}</span>
+          <span class="order-date">${formatDate(p.createdAt)}</span>
+        </div>
+        <span class="order-status-badge" style="background:${p.status === '상담완료' ? '#2D6A4F' : '#B45309'}">${p.status || '상담대기'}</span>
+      </div>
+      <div class="order-card-body">
+        <div class="order-info-grid">
+          <div class="order-info-item"><span class="order-info-label">연락처</span><span class="order-info-value">${p.phone}</span></div>
+          <div class="order-info-item"><span class="order-info-label">이메일</span><span class="order-info-value">${p.email || '—'}</span></div>
+          <div class="order-info-item"><span class="order-info-label">매장 규모</span><span class="order-info-value">${p.scale || '—'}</span></div>
+          <div class="order-info-item"><span class="order-info-label">상태</span>
+            <select class="partner-status-select" onchange="updatePartnerStatus(${i}, this.value)">
+              <option ${(p.status||'상담대기')==='상담대기' ? 'selected' : ''}>상담대기</option>
+              <option ${p.status==='상담진행중' ? 'selected' : ''}>상담진행중</option>
+              <option ${p.status==='상담완료' ? 'selected' : ''}>상담완료</option>
+            </select>
+          </div>
+          ${p.message ? `<div class="order-info-item full"><span class="order-info-label">문의 내용</span><span class="order-info-value">${p.message}</span></div>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updatePartnerStatus(idx, status) {
+  const partners = JSON.parse(localStorage.getItem('beans_partners') || '[]');
+  partners[idx].status = status;
+  localStorage.setItem('beans_partners', JSON.stringify(partners));
+  showToast(`상태가 "${status}"로 변경되었습니다`);
+}
+
 // ===== 초기화 =====
+initAdminAccounts();
+checkAdminAuth();
 renderList();
 updateOrderBadge();
+updateMemberBadge();

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마이페이지 — 한국엘리스테이블</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mypage.css" />
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="logo">한국엘리스테이블</a>
+    <nav class="nav">
+      <a href="index.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="subscription.html">Subscription</a>
+    </nav>
+    <div class="header-right" id="headerAuthArea"></div>
+  </header>
+
+  <main class="mypage-layout" id="mypageMain" style="display:none">
+
+    <!-- 왼쪽: 프로필 -->
+    <aside class="mypage-sidebar">
+      <div class="mypage-avatar" id="mypageAvatar"></div>
+      <p class="mypage-name" id="mypageName"></p>
+      <p class="mypage-email" id="mypageEmail"></p>
+      <p class="mypage-joined" id="mypageJoined"></p>
+      <div class="mypage-divider"></div>
+      <nav class="mypage-nav">
+        <button class="mypage-nav-btn active" onclick="showTab('orders')">주문 이력</button>
+        <button class="mypage-nav-btn" onclick="showTab('subs')">구독 현황</button>
+      </nav>
+      <button class="mypage-logout-btn" onclick="authLogout(); location.href='index.html'">로그아웃</button>
+    </aside>
+
+    <!-- 오른쪽: 내용 -->
+    <section class="mypage-content">
+
+      <!-- 주문 이력 탭 -->
+      <div id="tabOrders">
+        <h2 class="mypage-section-title">주문 이력</h2>
+        <div id="myOrderList"></div>
+      </div>
+
+      <!-- 구독 현황 탭 -->
+      <div id="tabSubs" style="display:none">
+        <h2 class="mypage-section-title">구독 현황</h2>
+        <div id="mySubList"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- 비로그인 안내 -->
+  <div class="mypage-login-prompt" id="mypagePrompt" style="display:none">
+    <p class="mypage-prompt-text">로그인 후 이용할 수 있습니다.</p>
+    <button class="btn-buy" style="width:auto;padding:13px 36px" onclick="openLoginModal()">로그인</button>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    function initMypage() {
+      const session = getSession();
+      if (!session) {
+        document.getElementById('mypagePrompt').style.display = 'flex';
+        return;
+      }
+
+      document.getElementById('mypageMain').style.display = 'grid';
+
+      // 프로필
+      const users   = JSON.parse(localStorage.getItem('beans_users') || '[]');
+      const user    = users.find(u => u.email === session.email) || session;
+      document.getElementById('mypageAvatar').textContent = session.name.charAt(0);
+      document.getElementById('mypageName').textContent   = session.name;
+      document.getElementById('mypageEmail').textContent  = session.email;
+      document.getElementById('mypageJoined').textContent =
+        user.joinedAt ? '가입일 · ' + formatDate(user.joinedAt) : '';
+
+      // 주문 이력
+      const orders = JSON.parse(localStorage.getItem('beans_orders') || '[]')
+        .filter(o => o.email === session.email);
+      const orderEl = document.getElementById('myOrderList');
+      if (orders.length === 0) {
+        orderEl.innerHTML = '<p class="mypage-empty">주문 이력이 없습니다.</p>';
+      } else {
+        orderEl.innerHTML = orders.map(o => `
+          <div class="my-order-card">
+            <div class="my-order-top">
+              <span class="my-order-no">${o.orderNo}</span>
+              <span class="my-order-date">${formatDate(o.createdAt)}</span>
+              <span class="my-order-badge" style="background:${STATUS_COLORS[o.status]||'#888'}">${o.status}</span>
+            </div>
+            <div class="my-order-body">
+              <p class="my-order-product">${o.product}</p>
+              <p class="my-order-amount">${o.amount}</p>
+              <p class="my-order-meta">${o.payment} · ${o.address}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // 구독 현황
+      const subs = JSON.parse(localStorage.getItem('beans_subscriptions') || '[]')
+        .filter(s => s.email === session.email);
+      const subEl = document.getElementById('mySubList');
+      if (subs.length === 0) {
+        subEl.innerHTML = '<p class="mypage-empty">구독 내역이 없습니다. <a href="subscription.html" style="color:#1A1A1A;font-weight:500;">구독 신청하기 →</a></p>';
+      } else {
+        subEl.innerHTML = subs.map(s => `
+          <div class="my-order-card">
+            <div class="my-order-top">
+              <span class="my-order-no">${s.plan} 플랜 · ${s.weight}</span>
+              <span class="my-order-date">${formatDate(s.createdAt)}</span>
+              <span class="my-order-badge" style="background:#1D4ED8">${s.status || '신청완료'}</span>
+            </div>
+            <div class="my-order-body">
+              <p class="my-order-product">월 ${s.frequency}회 · ${s.grind}</p>
+              <p class="my-order-meta">신청일 ${formatDate(s.createdAt)}</p>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    const STATUS_COLORS = {
+      '주문완료':'#B45309','배송준비중':'#1D4ED8','배송중':'#6D28D9','배송완료':'#2D6A4F','취소':'#C0392B'
+    };
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function showTab(tab) {
+      document.getElementById('tabOrders').style.display = tab === 'orders' ? '' : 'none';
+      document.getElementById('tabSubs').style.display   = tab === 'subs'   ? '' : 'none';
+      document.querySelectorAll('.mypage-nav-btn').forEach((b, i) => {
+        b.classList.toggle('active', (i === 0 && tab === 'orders') || (i === 1 && tab === 'subs'));
+      });
+    }
+
+    initMypage();
+  </script>
+</body>
+</html>

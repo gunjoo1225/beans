@@ -98,6 +98,7 @@ function toggleAllTerms(checkbox) {
 function submitOrder() {
   const name    = document.getElementById('receiverName').value.trim();
   const phone   = document.getElementById('receiverPhone').value.trim();
+  const email   = document.getElementById('receiverEmail').value.trim();
   const address = document.getElementById('address').value.trim();
   const detail  = document.getElementById('addressDetail').value.trim();
 
@@ -135,6 +136,7 @@ function submitOrder() {
     payment:   PAYMENT_LABELS[payment] || payment,
     receiver:  name,
     phone,
+    email:     email || '',
     address:   `${address} ${detail}`,
     memo:      memo || '',
     status:    '주문완료',

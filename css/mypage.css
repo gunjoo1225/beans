@@ -1,0 +1,219 @@
+/* ===== 마이페이지 레이아웃 ===== */
+.mypage-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-width: 1100px;
+  margin: 48px auto 80px;
+  padding: 0 40px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ===== 사이드바 ===== */
+.mypage-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px;
+  background-color: #FFFFFF;
+  border: 1px solid #E8E4DC;
+  position: sticky;
+  top: 80px;
+}
+
+.mypage-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #1A1A1A;
+  color: #FAF8F4;
+  font-size: 26px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.mypage-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1A1A1A;
+  margin-bottom: 4px;
+}
+
+.mypage-email {
+  font-size: 12px;
+  color: #6B6B6B;
+  margin-bottom: 4px;
+  text-align: center;
+  word-break: break-all;
+}
+
+.mypage-joined {
+  font-size: 11px;
+  color: #AAAAAA;
+}
+
+.mypage-divider {
+  width: 100%;
+  height: 1px;
+  background-color: #E8E4DC;
+  margin: 20px 0;
+}
+
+.mypage-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.mypage-nav-btn {
+  width: 100%;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #6B6B6B;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+  border-radius: 2px;
+}
+
+.mypage-nav-btn:hover { color: #1A1A1A; background-color: #F5F2EC; }
+.mypage-nav-btn.active { color: #1A1A1A; font-weight: 600; background-color: #F5F2EC; }
+
+.mypage-logout-btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #AAAAAA;
+  background: none;
+  border: 1px solid #E8E4DC;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.mypage-logout-btn:hover { color: #C0392B; border-color: #C0392B; }
+
+/* ===== 콘텐츠 ===== */
+.mypage-content {
+  min-height: 400px;
+}
+
+.mypage-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E8E4DC;
+}
+
+/* ===== 주문 카드 ===== */
+.my-order-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E8E4DC;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.my-order-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background-color: #FAF8F4;
+  border-bottom: 1px solid #E8E4DC;
+  flex-wrap: wrap;
+}
+
+.my-order-no {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  flex: 1;
+  min-width: 0;
+}
+
+.my-order-date {
+  font-size: 12px;
+  color: #6B6B6B;
+}
+
+.my-order-badge {
+  padding: 3px 10px;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.my-order-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.my-order-product {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
+.my-order-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1A1A1A;
+}
+
+.my-order-meta {
+  font-size: 12px;
+  color: #6B6B6B;
+}
+
+.mypage-empty {
+  font-size: 14px;
+  color: #AAAAAA;
+  padding: 40px 0;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* ===== 비로그인 안내 ===== */
+.mypage-login-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: calc(100vh - 200px);
+}
+
+.mypage-prompt-text {
+  font-size: 16px;
+  color: #6B6B6B;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .mypage-layout {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+    margin: 24px auto 60px;
+    gap: 24px;
+  }
+
+  .mypage-sidebar {
+    position: static;
+  }
+}

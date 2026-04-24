@@ -75,6 +75,175 @@ button {
   color: #6B6B6B;
 }
 
+/* ===== 로그인 상태 ===== */
+.auth-user-btn {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1A1A1A;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.auth-user-btn:hover { color: #6B6B6B; }
+
+.auth-btn--ghost {
+  border-color: transparent !important;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.auth-btn--ghost:hover { border-color: transparent !important; }
+
+/* ===== HEADER RIGHT ===== */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.auth-btn {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #6B6B6B;
+  padding: 7px 16px;
+  border: 1px solid #E8E4DC;
+  background: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.auth-btn:hover {
+  border-color: #1A1A1A;
+  color: #1A1A1A;
+}
+
+/* ===== 회원가입 모달 ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(26, 26, 26, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-container {
+  background-color: #FAF8F4;
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  transform: translateY(16px);
+  transition: transform 0.25s;
+}
+
+.modal-overlay.open .modal-container {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 22px;
+  color: #6B6B6B;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: #1A1A1A;
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.modal-sub {
+  font-size: 13px;
+  color: #6B6B6B;
+  margin-bottom: 32px;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #6B6B6B;
+}
+
+.form-input {
+  padding: 11px 14px;
+  border: 1px solid #E8E4DC;
+  background-color: #FFFFFF;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1A1A1A;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #1A1A1A;
+}
+
+.form-input::placeholder {
+  color: #BBBBBB;
+}
+
+.form-error {
+  font-size: 12px;
+  color: #C0392B;
+  min-height: 16px;
+}
+
+.btn-signup-submit {
+  width: 100%;
+  padding: 14px;
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+  margin-top: 6px;
+}
+
+.btn-signup-submit:hover {
+  background-color: #444444;
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    padding: 40px 28px;
+    margin: 0 20px;
+  }
+}
+
 /* ===== BREADCRUMB ===== */
 .breadcrumb {
   display: flex;
@@ -466,6 +635,19 @@ button {
   padding: 24px 40px;
   border-top: 1px solid #E8E4DC;
   margin-top: 40px;
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-brand {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6B6B6B;
+  letter-spacing: 0.04em;
 }
 
 .footer-copy {
