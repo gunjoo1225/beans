@@ -191,9 +191,64 @@ function showAuthToast(msg) {
 
 // ----- ESC 키 -----
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeLoginModal(); closeSignupModal(); }
+  if (e.key === 'Escape') { closeLoginModal(); closeSignupModal(); closeMobileMenu(); }
 });
+
+// ----- 모바일 햄버거 메뉴 -----
+function injectMobileMenu() {
+  if (document.getElementById('mobileMenuBtn')) return;
+  const nav = document.querySelector('nav.nav');
+  if (!nav) return;
+  const btn = document.createElement('button');
+  btn.id = 'mobileMenuBtn';
+  btn.className = 'mobile-menu-btn';
+  btn.setAttribute('aria-label', '메뉴 열기');
+  btn.innerHTML = '<span></span><span></span><span></span>';
+  btn.onclick = toggleMobileMenu;
+  nav.parentNode.insertBefore(btn, nav);
+  nav.addEventListener('click', e => { if (e.target.tagName === 'A') closeMobileMenu(); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('nav.nav') && !e.target.closest('#mobileMenuBtn')) closeMobileMenu();
+  });
+}
+
+function toggleMobileMenu() {
+  const nav = document.querySelector('nav.nav');
+  const btn = document.getElementById('mobileMenuBtn');
+  if (!nav) return;
+  const isOpen = nav.classList.toggle('open');
+  if (btn) btn.classList.toggle('open', isOpen);
+  if (isOpen) updateMobileNavAuth();
+}
+
+function closeMobileMenu() {
+  const nav = document.querySelector('nav.nav');
+  const btn = document.getElementById('mobileMenuBtn');
+  if (nav) nav.classList.remove('open');
+  if (btn) btn.classList.remove('open');
+}
+
+function updateMobileNavAuth() {
+  let authArea = document.getElementById('mobileNavAuth');
+  if (!authArea) {
+    authArea = document.createElement('div');
+    authArea.id = 'mobileNavAuth';
+    authArea.className = 'mobile-nav-auth';
+    document.querySelector('nav.nav')?.appendChild(authArea);
+  }
+  const session = getSession();
+  if (session) {
+    authArea.innerHTML = `
+      <a href="mypage.html" class="mobile-nav-link" onclick="closeMobileMenu()">${session.name}님 · 마이페이지</a>
+      <button class="mobile-nav-link" onclick="authLogout();closeMobileMenu()">로그아웃</button>`;
+  } else {
+    authArea.innerHTML = `
+      <button class="mobile-nav-link" onclick="closeMobileMenu();setTimeout(openLoginModal,100)">로그인</button>
+      <button class="mobile-nav-link" onclick="closeMobileMenu();setTimeout(openSignupModal,100)">회원가입</button>`;
+  }
+}
 
 // ----- 초기화 -----
 injectAuthModals();
 updateHeaderAuth();
+injectMobileMenu();

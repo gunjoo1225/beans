@@ -667,31 +667,138 @@ button {
   color: #AAAAAA;
 }
 
+/* ===== 햄버거 버튼 (PC에서 숨김) ===== */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 10px;
+}
+.mobile-menu-btn span {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background-color: #1A1A1A;
+  transition: transform 0.25s, opacity 0.25s;
+  transform-origin: center;
+}
+.mobile-menu-btn.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-btn.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+  /* 헤더 */
   .header {
-    padding: 16px 20px;
+    padding: 14px 16px;
+    position: sticky;
   }
 
+  .logo {
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 모바일 nav — 드롭다운으로 전환 */
   .nav {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #FAF8F4;
+    border-bottom: 2px solid #E8E4DC;
+    flex-direction: column;
+    gap: 0;
+    z-index: 50;
+    box-shadow: 0 8px 20px rgba(26,26,26,0.10);
+    padding: 4px 0 8px;
+  }
+  .nav.open {
+    display: flex;
+  }
+  .nav a {
+    padding: 15px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1A1A1A;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid #F0EDE6;
+  }
+  .nav a:hover,
+  .nav a.active {
+    background-color: #F5F2EC;
+    color: #1A1A1A;
   }
 
+  /* 햄버거 버튼 표시 */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* header-right: cart만 */
+  .header-right {
+    gap: 0;
+    flex-shrink: 0;
+  }
+  .auth-btn,
+  .auth-user-btn {
+    display: none !important;
+  }
+  .header-right .cart-icon {
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 4px 0;
+  }
+
+  /* 모바일 nav 안 auth 영역 */
+  .mobile-nav-auth {
+    border-top: 2px solid #E8E4DC;
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+  .mobile-nav-link {
+    display: block;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B6B6B;
+    text-decoration: none;
+    border-bottom: 1px solid #F0EDE6;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    width: 100%;
+    letter-spacing: 0.02em;
+    transition: background-color 0.15s, color 0.15s;
+  }
+  .mobile-nav-link:hover {
+    background-color: #F5F2EC;
+    color: #1A1A1A;
+  }
+
+  /* 기타 */
   .breadcrumb {
     padding: 12px 20px;
   }
-
   .product-layout {
     grid-template-columns: 1fr;
     gap: 32px;
     padding: 20px 20px 60px;
   }
-
-  .product-name {
-    font-size: 22px;
-  }
-
-  .product-price {
-    font-size: 20px;
-  }
+  .product-name { font-size: 22px; }
+  .product-price { font-size: 20px; }
 }
