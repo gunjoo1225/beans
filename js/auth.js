@@ -241,12 +241,12 @@ function updateMobileNavAuth() {
     authArea.innerHTML = `
       <a href="mypage.html" class="mobile-nav-link" onclick="closeMobileMenu()">${session.name}님 · 마이페이지</a>
       <button class="mobile-nav-link" onclick="authLogout();closeMobileMenu()">로그아웃</button>
-      <a href="admin.html" class="mobile-nav-link mobile-nav-link--admin" onclick="closeMobileMenu()">관리자</a>`;
+      <a href="admin-test.html" class="mobile-nav-link mobile-nav-link--admin" onclick="closeMobileMenu()">관리자</a>`;
   } else {
     authArea.innerHTML = `
       <button class="mobile-nav-link" onclick="closeMobileMenu();setTimeout(openLoginModal,100)">로그인</button>
       <button class="mobile-nav-link" onclick="closeMobileMenu();setTimeout(openSignupModal,100)">회원가입</button>
-      <a href="admin.html" class="mobile-nav-link mobile-nav-link--admin" onclick="closeMobileMenu()">관리자</a>`;
+      <a href="admin-test.html" class="mobile-nav-link mobile-nav-link--admin" onclick="closeMobileMenu()">관리자</a>`;
   }
 }
 
