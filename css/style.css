@@ -699,18 +699,19 @@ button {
 .footer-admin-link {
   font-size: 14px;
   font-weight: 600;
-  color: #FAF8F4;
+  color: #1A1A1A;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.35);
+  border: 1px solid #D0CBC2;
   padding: 6px 16px;
   border-radius: 4px;
-  transition: background 0.25s, color 0.25s;
+  transition: background 0.25s, border-color 0.25s;
   letter-spacing: 0.04em;
 }
 
 .footer-admin-link:hover {
-  background: #FAF8F4;
-  color: #1A1A1A;
+  background: #1A1A1A;
+  color: #FAF8F4;
+  border-color: #1A1A1A;
 }
 
 /* ===== 햄버거 버튼 (PC에서 숨김) ===== */
